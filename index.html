@@ -221,6 +221,18 @@
     transition: background .2s ease;
   }
   .mat-link:hover { background: var(--blue-hover); }
+  .mat-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .mat-card .mat-title { margin-bottom: 4px; }
+  .mat-card .mat-note { margin-bottom: 0; }
+  .mat-card .mat-link { flex-shrink: 0; white-space: nowrap; }
+  @media (max-width: 480px) {
+    .mat-card { flex-direction: column; align-items: flex-start; }
+  }
   .prog-item {
     padding: 10px 0;
     font-size: 16px;
@@ -308,17 +320,23 @@
   </section>
 
   <section id="tab-materials" class="tab">
-    <div class="card">
-      <p class="mat-title">Видео</p>
-      <p class="mat-note">Видео Александра Орлова у Комаровского.</p>
+    <div class="card mat-card">
+      <div class="mat-text">
+        <p class="mat-title">Видео</p>
+        <p class="mat-note">Видео Александра Орлова у Комаровского.</p>
+      </div>
       <a class="mat-link" href="https://disk.yandex.ru/i/MGqfmU_kIw1ctg" target="_blank" rel="noopener">Смотреть видео</a>
     </div>
-    <div class="card">
-      <p class="mat-title">Вводный урок с Влад NGI. 05.08.2026</p>
+    <div class="card mat-card">
+      <div class="mat-text">
+        <p class="mat-title">Вводный урок с Влад NGI. 05.08.2026</p>
+      </div>
       <a class="mat-link" href="https://disk.yandex.ru/i/QnQHGpvrJEyopw" target="_blank" rel="noopener">Смотреть видео</a>
     </div>
-    <div class="card">
-      <p class="mat-title">Задачи сотрудников</p>
+    <div class="card mat-card">
+      <div class="mat-text">
+        <p class="mat-title">Задачи сотрудников</p>
+      </div>
       <a class="mat-link" href="https://antonanton.any.org/obuchenie-ii-alfa-stroy" target="_blank" rel="noopener">Открыть</a>
     </div>
   </section>
