@@ -148,10 +148,27 @@
   .msg.ok { color: var(--ok); display: block; }
   .msg.err { color: var(--err); display: block; }
   .total {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 20px 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .04);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .total:empty { display: none; }
+  .total-num {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    line-height: 1;
+  }
+  .total-label {
     font-size: 15px;
     color: var(--muted);
     letter-spacing: -0.01em;
-    margin-bottom: 18px;
   }
   .dept-group {
     background: var(--card);
@@ -319,7 +336,8 @@ function renderParticipants() {
     box.innerHTML = '<p class="placeholder">Список отделов ещё не загрузился — обновите страницу.</p>';
     return;
   }
-  total.textContent = 'Всего участников: ' + participants.length;
+  total.innerHTML = '<span class="total-num">' + participants.length +
+    '</span><span class="total-label">Итого участников</span>';
 
   const order = departments.slice();
   participants.forEach(function (p) {
