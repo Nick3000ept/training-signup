@@ -6,127 +6,210 @@
 <title>Запись на обучение</title>
 <style>
   :root {
-    --accent: #2563eb;
-    --accent-dark: #1d4ed8;
-    --bg: #f3f4f6;
+    --blue: #0071e3;
+    --blue-hover: #0077ed;
+    --bg: #f5f5f7;
     --card: #ffffff;
-    --text: #1f2937;
-    --muted: #6b7280;
-    --border: #e5e7eb;
-    --ok: #16a34a;
-    --err: #dc2626;
+    --text: #1d1d1f;
+    --muted: #6e6e73;
+    --hairline: #d2d2d7;
+    --seg-bg: #e8e8ed;
+    --ok: #248a3d;
+    --err: #d70015;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
-    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
   }
   header {
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 10;
+    background: rgba(251, 251, 253, .8);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, .08);
   }
   .head-inner {
-    max-width: 720px;
+    max-width: 680px;
     margin: 0 auto;
-    padding: 14px 16px 0;
+    padding: 18px 20px 14px;
   }
-  h1 { font-size: 20px; margin-bottom: 10px; }
-  nav { display: flex; gap: 4px; overflow-x: auto; }
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.021em;
+    margin-bottom: 14px;
+  }
+  nav {
+    display: flex;
+    background: var(--seg-bg);
+    border-radius: 12px;
+    padding: 3px;
+    gap: 2px;
+    overflow-x: auto;
+  }
   nav button {
+    flex: 1;
     border: none;
-    background: none;
-    font-size: 15px;
-    padding: 10px 14px;
-    cursor: pointer;
-    color: var(--muted);
-    border-bottom: 3px solid transparent;
-    white-space: nowrap;
+    background: transparent;
     font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 9px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .2s ease, box-shadow .2s ease, color .2s ease;
   }
   nav button.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .12);
     font-weight: 600;
   }
-  main { max-width: 720px; margin: 0 auto; padding: 20px 16px 60px; }
-  .tab { display: none; }
+  main { max-width: 680px; margin: 0 auto; padding: 28px 20px 80px; }
+  .tab { display: none; animation: fadein .25s ease; }
   .tab.active { display: block; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
   .card {
     background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 16px;
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .04);
   }
-  label { display: block; font-size: 14px; color: var(--muted); margin: 14px 0 6px; }
-  label:first-child { margin-top: 0; }
-  input, select {
-    width: 100%;
-    padding: 11px 12px;
-    font-size: 16px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: #fff;
-    color: var(--text);
-    font-family: inherit;
+  .lead {
+    font-size: 15px;
+    color: var(--muted);
+    letter-spacing: -0.01em;
+    margin-bottom: 22px;
   }
-  input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
-  .btn {
-    margin-top: 18px;
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #fff;
-    background: var(--accent);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: inherit;
-  }
-  .btn:hover { background: var(--accent-dark); }
-  .btn:disabled { opacity: .6; cursor: default; }
-  .msg { margin-top: 12px; font-size: 14px; display: none; }
-  .msg.ok { color: var(--ok); display: block; }
-  .msg.err { color: var(--err); display: block; }
-  .dept-group { margin-bottom: 14px; }
-  .dept-title {
-    font-size: 14px;
+  label {
+    display: block;
+    font-size: 13px;
     font-weight: 600;
     color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: .03em;
-    margin-bottom: 6px;
+    letter-spacing: -0.005em;
+    margin: 18px 0 7px;
+  }
+  label:first-of-type { margin-top: 0; }
+  input, select {
+    width: 100%;
+    padding: 13px 14px;
+    font-size: 17px;
+    font-family: inherit;
+    letter-spacing: -0.01em;
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--text);
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%236e6e73' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(0, 113, 227, .15);
+  }
+  ::placeholder { color: #aeaeb2; }
+  .btn {
+    margin-top: 24px;
+    width: 100%;
+    padding: 13px;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    font-family: inherit;
+    color: #fff;
+    background: var(--blue);
+    border: none;
+    border-radius: 980px;
+    cursor: pointer;
+    transition: background .2s ease, transform .1s ease;
+  }
+  .btn:hover { background: var(--blue-hover); }
+  .btn:active { transform: scale(.98); }
+  .btn:disabled { opacity: .5; cursor: default; transform: none; }
+  .msg { margin-top: 14px; font-size: 14px; letter-spacing: -0.005em; text-align: center; display: none; }
+  .msg.ok { color: var(--ok); display: block; }
+  .msg.err { color: var(--err); display: block; }
+  .total {
+    font-size: 15px;
+    color: var(--muted);
+    letter-spacing: -0.01em;
+    margin-bottom: 18px;
+  }
+  .dept-group {
+    background: var(--card);
+    border-radius: 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .04);
+    overflow: hidden;
+  }
+  .dept-title {
     display: flex;
     justify-content: space-between;
-  }
-  .dept-title .cnt { color: var(--accent); }
-  .person {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 9px 12px;
-    margin-bottom: 6px;
+    align-items: center;
+    padding: 15px 20px 12px;
     font-size: 15px;
-  }
-  .total { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
-  .placeholder { color: var(--muted); font-size: 15px; }
-  .mat-link {
-    display: block;
-    color: var(--accent);
-    font-size: 16px;
     font-weight: 600;
-    text-decoration: none;
-    word-break: break-all;
+    letter-spacing: -0.01em;
   }
-  .mat-link:hover { text-decoration: underline; }
-  .mat-note { color: var(--muted); font-size: 14px; margin-top: 6px; }
-  .loading { color: var(--muted); font-size: 14px; }
+  .dept-title .cnt {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--seg-bg);
+    border-radius: 980px;
+    padding: 3px 10px;
+  }
+  .person {
+    padding: 12px 20px;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    border-top: 1px solid rgba(0, 0, 0, .06);
+  }
+  .placeholder { color: var(--muted); font-size: 16px; letter-spacing: -0.01em; }
+  .mat-title {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-bottom: 6px;
+  }
+  .mat-note { color: var(--muted); font-size: 15px; letter-spacing: -0.01em; margin-bottom: 20px; }
+  .mat-link {
+    display: inline-block;
+    color: #fff;
+    background: var(--blue);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 980px;
+    transition: background .2s ease;
+  }
+  .mat-link:hover { background: var(--blue-hover); }
+  .loading { color: var(--muted); font-size: 15px; }
+  @media (max-width: 480px) {
+    h1 { font-size: 23px; }
+    .card { padding: 22px 18px; }
+    nav button { font-size: 13px; padding: 8px 6px; }
+  }
 </style>
 </head>
 <body>
@@ -147,6 +230,7 @@
 
   <section id="tab-signup" class="tab active">
     <div class="card">
+      <p class="lead">Укажите своё ФИО и выберите отдел — и вы в списке участников.</p>
       <label for="fio">ФИО</label>
       <input id="fio" type="text" placeholder="Иванов Иван Иванович" maxlength="100" autocomplete="name">
       <label for="dept">Отдел</label>
@@ -169,8 +253,9 @@
 
   <section id="tab-materials" class="tab">
     <div class="card">
-      <a class="mat-link" href="https://disk.yandex.ru/i/MGqfmU_kIw1ctg" target="_blank" rel="noopener">Смотреть видео</a>
+      <p class="mat-title">Видео</p>
       <p class="mat-note">Видео Александра Орлова у Комаровского.</p>
+      <a class="mat-link" href="https://disk.yandex.ru/i/MGqfmU_kIw1ctg" target="_blank" rel="noopener">Смотреть видео</a>
     </div>
   </section>
 
