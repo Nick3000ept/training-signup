@@ -221,6 +221,13 @@
     transition: background .2s ease;
   }
   .mat-link:hover { background: var(--blue-hover); }
+  .prog-item {
+    padding: 10px 0;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    border-top: 1px solid rgba(0, 0, 0, .06);
+  }
+  .prog-item:first-of-type { border-top: none; padding-top: 0; }
   .loading { color: var(--muted); font-size: 15px; }
   @media (max-width: 480px) {
     h1 { font-size: 23px; }
@@ -264,7 +271,39 @@
 
   <section id="tab-program" class="tab">
     <div class="card">
-      <p class="placeholder">Программа обучения будет добавлена позже.</p>
+      <p class="mat-title">Корпоративная программа обучения AI</p>
+      <p class="mat-note">Программа собрана под задачи, которые прислали подразделения, и под результаты опроса сотрудников: 59 задач от семи подразделений. Всего 12 занятий в трёх частях.</p>
+      <a class="mat-link" href="programma.pdf" target="_blank" rel="noopener">Программа (PDF)</a>
+    </div>
+    <div class="card">
+      <p class="mat-title">Общая база — 3 занятия</p>
+      <p class="mat-note">Для всей группы, один поток.</p>
+      <div class="prog-item">1. Знакомство с AI: как это работает и как этим пользоваться</div>
+      <div class="prog-item">2. Claude Cowork: работа с файлами и данными</div>
+      <div class="prog-item">3. Claude Code: агенты кодинга для не-программистов</div>
+    </div>
+    <div class="card">
+      <p class="mat-title">Модули по направлениям — 5 занятий</p>
+      <p class="mat-note">По одному занятию на направление, на задачах подразделений.</p>
+      <div class="prog-item">А. Проектная документация и чертежи</div>
+      <div class="prog-item">Б. Тендеры, подрядчики и цены</div>
+      <div class="prog-item">В. Финансы, бюджет и отчётность</div>
+      <div class="prog-item">Г. Контроль стройки, сроки и переписка</div>
+      <div class="prog-item">Д. Документы и договорная работа</div>
+    </div>
+    <div class="card">
+      <p class="mat-title">Трек ядра развития AI — 4 занятия</p>
+      <p class="mat-note">Отдельная группа 7–10 человек, отбор по домашним заданиям базовых занятий. Как строить внутренние инструменты и передавать их коллегам.</p>
+      <div class="prog-item">1. Claude Code как инструмент разработки</div>
+      <div class="prog-item">2. От процесса к внутренней системе</div>
+      <div class="prog-item">3. Интеграции и подключения</div>
+      <div class="prog-item">4. Тиражирование внутри компании</div>
+    </div>
+    <div class="card">
+      <p class="mat-title">Формат</p>
+      <div class="prog-item">Онлайн, занятие — 2 часа</div>
+      <div class="prog-item">По пятницам, одно занятие в неделю</div>
+      <div class="prog-item">Все занятия записываются, записи остаются у компании</div>
     </div>
   </section>
 
