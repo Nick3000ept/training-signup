@@ -314,9 +314,9 @@ function renderParticipants() {
   const box = document.getElementById('peopleList');
   const total = document.getElementById('total');
   box.classList.remove('loading');
-  if (!participants.length) {
+  if (!departments.length && !participants.length) {
     total.textContent = '';
-    box.innerHTML = '<p class="placeholder">Пока никто не записался — будьте первым!</p>';
+    box.innerHTML = '<p class="placeholder">Список отделов ещё не загрузился — обновите страницу.</p>';
     return;
   }
   total.textContent = 'Всего участников: ' + participants.length;
@@ -329,7 +329,6 @@ function renderParticipants() {
   let html = '';
   order.forEach(function (dept) {
     const people = participants.filter(function (p) { return (p.dept || 'Без отдела') === dept; });
-    if (!people.length) return;
     html += '<div class="dept-group"><div class="dept-title"><span>' + escapeHtml(dept) +
       '</span><span class="cnt">' + people.length + '</span></div>';
     people.forEach(function (p) {
