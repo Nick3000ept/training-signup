@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Запись на обучение</title>
+<style>
+  :root {
+    --accent: #2563eb;
+    --accent-dark: #1d4ed8;
+    --bg: #f3f4f6;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --ok: #16a34a;
+    --err: #dc2626;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .head-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 14px 16px 0;
+  }
+  h1 { font-size: 20px; margin-bottom: 10px; }
+  nav { display: flex; gap: 4px; overflow-x: auto; }
+  nav button {
+    border: none;
+    background: none;
+    font-size: 15px;
+    padding: 10px 14px;
+    cursor: pointer;
+    color: var(--muted);
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  nav button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+  main { max-width: 720px; margin: 0 auto; padding: 20px 16px 60px; }
+  .tab { display: none; }
+  .tab.active { display: block; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  label { display: block; font-size: 14px; color: var(--muted); margin: 14px 0 6px; }
+  label:first-child { margin-top: 0; }
+  input, select {
+    width: 100%;
+    padding: 11px 12px;
+    font-size: 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+    font-family: inherit;
+  }
+  input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .btn {
+    margin-top: 18px;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn:hover { background: var(--accent-dark); }
+  .btn:disabled { opacity: .6; cursor: default; }
+  .msg { margin-top: 12px; font-size: 14px; display: none; }
+  .msg.ok { color: var(--ok); display: block; }
+  .msg.err { color: var(--err); display: block; }
+  .dept-group { margin-bottom: 14px; }
+  .dept-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .dept-title .cnt { color: var(--accent); }
+  .person {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    margin-bottom: 6px;
+    font-size: 15px;
+  }
+  .total { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
+  .placeholder { color: var(--muted); font-size: 15px; }
+  .mat-link {
+    display: block;
+    color: var(--accent);
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    word-break: break-all;
+  }
+  .mat-link:hover { text-decoration: underline; }
+  .mat-note { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  .loading { color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-inner">
+    <h1>Запись на обучение</h1>
+    <nav>
+      <button class="active" data-tab="signup">Запись</button>
+      <button data-tab="people">Участники</button>
+      <button data-tab="program">Программа</button>
+      <button data-tab="materials">Материалы</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section id="tab-signup" class="tab active">
+    <div class="card">
+      <label for="fio">ФИО</label>
+      <input id="fio" type="text" placeholder="Иванов Иван Иванович" maxlength="100" autocomplete="name">
+      <label for="dept">Отдел</label>
+      <select id="dept"><option value="">Загрузка…</option></select>
+      <button class="btn" id="saveBtn">Записаться</button>
+      <div class="msg" id="saveMsg"></div>
+    </div>
+  </section>
+
+  <section id="tab-people" class="tab">
+    <div class="total" id="total"></div>
+    <div id="peopleList" class="loading">Загрузка списка…</div>
+  </section>
+
+  <section id="tab-program" class="tab">
+    <div class="card">
+      <p class="placeholder">Программа обучения будет добавлена позже.</p>
+    </div>
+  </section>
+
+  <section id="tab-materials" class="tab">
+    <div class="card">
+      <a class="mat-link" href="https://disk.yandex.ru/i/MGqfmU_kIw1ctg" target="_blank" rel="noopener">Смотреть видео</a>
+      <p class="mat-note">Видео Александра Орлова у Комаровского.</p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const BASE = 'https://script.google.com/macros/s/AKfycbx4OoQXUlWmbVgfQbYkDM_S5YTFRuUuYOKbC03dajF33mIL9QsOCFaLY_GL3cYsTl--/exec';
+const CACHE_KEY = 'training_signup_snapshot_v1';
+
+let departments = [];
+let participants = [];
+
+// --- вкладки ---
+document.querySelectorAll('nav button').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    document.querySelectorAll('nav button').forEach(function (b) { b.classList.remove('active'); });
+    document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// --- сеть с ретраями ---
+async function fetchJson(url, options, tries) {
+  tries = tries || 3;
+  let lastErr;
+  for (let i = 0; i < tries; i++) {
+    try {
+      const resp = await fetch(url, options);
+      const text = await resp.text();
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        throw new Error('Сервер вернул не данные, а страницу ошибки');
+      }
+    } catch (e) {
+      lastErr = e;
+      if (i < tries - 1) await new Promise(function (r) { setTimeout(r, 1200 * (i + 1)); });
+    }
+  }
+  throw lastErr;
+}
+
+// --- отрисовка ---
+function renderDepartments() {
+  const sel = document.getElementById('dept');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— выберите отдел —</option>' +
+    departments.map(function (d) {
+      return '<option value="' + escapeHtml(d) + '">' + escapeHtml(d) + '</option>';
+    }).join('');
+  if (current && departments.indexOf(current) !== -1) sel.value = current;
+}
+
+function renderParticipants() {
+  const box = document.getElementById('peopleList');
+  const total = document.getElementById('total');
+  box.classList.remove('loading');
+  if (!participants.length) {
+    total.textContent = '';
+    box.innerHTML = '<p class="placeholder">Пока никто не записался — будьте первым!</p>';
+    return;
+  }
+  total.textContent = 'Всего участников: ' + participants.length;
+
+  const order = departments.slice();
+  participants.forEach(function (p) {
+    if (order.indexOf(p.dept) === -1) order.push(p.dept || 'Без отдела');
+  });
+
+  let html = '';
+  order.forEach(function (dept) {
+    const people = participants.filter(function (p) { return (p.dept || 'Без отдела') === dept; });
+    if (!people.length) return;
+    html += '<div class="dept-group"><div class="dept-title"><span>' + escapeHtml(dept) +
+      '</span><span class="cnt">' + people.length + '</span></div>';
+    people.forEach(function (p) {
+      html += '<div class="person">' + escapeHtml(p.fio) + '</div>';
+    });
+    html += '</div>';
+  });
+  box.innerHTML = html;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+function applySnapshot(data) {
+  departments = data.departments || [];
+  participants = data.participants || [];
+  renderDepartments();
+  renderParticipants();
+}
+
+// --- загрузка ---
+async function load() {
+  try {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) applySnapshot(JSON.parse(cached));
+  } catch (e) { /* кэш недоступен — не страшно */ }
+
+  try {
+    const data = await fetchJson(BASE + '?action=load');
+    if (data.ok) {
+      applySnapshot(data);
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch (e) {}
+    } else {
+      showLoadError(data.error);
+    }
+  } catch (e) {
+    showLoadError(e.message);
+  }
+}
+
+function showLoadError(text) {
+  if (!departments.length) {
+    document.getElementById('dept').innerHTML = '<option value="">Не удалось загрузить</option>';
+    document.getElementById('peopleList').innerHTML =
+      '<p class="placeholder">Не удалось загрузить список: ' + escapeHtml(text || 'ошибка сети') +
+      '. Обновите страницу.</p>';
+  }
+}
+
+// --- запись ---
+document.getElementById('saveBtn').addEventListener('click', async function () {
+  const fio = document.getElementById('fio').value.trim();
+  const dept = document.getElementById('dept').value;
+  const msg = document.getElementById('saveMsg');
+  const btn = this;
+  msg.className = 'msg';
+
+  if (fio.length < 3) { msg.className = 'msg err'; msg.textContent = 'Укажите ФИО.'; return; }
+  if (!dept) { msg.className = 'msg err'; msg.textContent = 'Выберите отдел.'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Записываем…';
+  try {
+    const data = await fetchJson(BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'save', fio: fio, dept: dept })
+    }, 2);
+    if (data.ok) {
+      participants = data.participants || participants;
+      renderParticipants();
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ departments: departments, participants: participants }));
+      } catch (e) {}
+      msg.className = 'msg ok';
+      msg.textContent = 'Готово! Вы записаны: ' + fio + ' — ' + dept + '.';
+      document.getElementById('fio').value = '';
+    } else {
+      msg.className = 'msg err';
+      msg.textContent = data.error || 'Не удалось записаться, попробуйте ещё раз.';
+    }
+  } catch (e) {
+    msg.className = 'msg err';
+    msg.textContent = 'Ошибка сети: ' + e.message + '. Попробуйте ещё раз.';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Записаться';
+});
+
+load();
+</script>
+</body>
+</html>
