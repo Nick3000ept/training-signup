@@ -240,6 +240,127 @@
     border-top: 1px solid rgba(0, 0, 0, .06);
   }
   .prog-item:first-of-type { border-top: none; padding-top: 0; }
+  details.prog { border-top: 1px solid rgba(0, 0, 0, .06); }
+  details.prog:first-of-type { border-top: none; }
+  details.prog summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    list-style: none;
+  }
+  details.prog summary::-webkit-details-marker { display: none; }
+  details.prog summary::after {
+    content: '+';
+    flex-shrink: 0;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1;
+  }
+  details.prog[open] summary::after { content: '\2212'; }
+  .sub-list { padding: 2px 0 14px; }
+  .sub-item {
+    padding: 6px 0 6px 14px;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    border-left: 2px solid var(--seg-bg);
+    margin-left: 2px;
+  }
+  .sub-head {
+    padding: 10px 0 4px 2px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .chk {
+    position: relative;
+    padding: 7px 0 7px 26px;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+  }
+  .chk::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 11px;
+    width: 13px;
+    height: 13px;
+    border: 1.5px solid var(--hairline);
+    border-radius: 4px;
+  }
+  pre.tree {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 10px 0 4px;
+  }
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(0, 0, 0, .4);
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+  .modal {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 28px;
+    width: 100%;
+    max-width: 440px;
+    margin-top: 8vh;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .2);
+    animation: fadein .2s ease;
+  }
+  .modal-title {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-bottom: 4px;
+  }
+  .modal .lead { margin-bottom: 4px; }
+  input[type="file"] {
+    padding: 11px 12px;
+    font-size: 14px;
+  }
+  input[type="file"]::file-selector-button {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--seg-bg);
+    border: none;
+    border-radius: 980px;
+    padding: 6px 14px;
+    margin-right: 12px;
+    cursor: pointer;
+  }
+  .btn-ghost {
+    margin-top: 10px;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: inherit;
+    color: var(--blue);
+    background: transparent;
+    border: none;
+    border-radius: 980px;
+    cursor: pointer;
+  }
+  .btn-ghost:hover { background: rgba(0, 113, 227, .06); }
   .loading { color: var(--muted); font-size: 15px; }
   @media (max-width: 480px) {
     h1 { font-size: 23px; }
@@ -257,6 +378,7 @@
       <button class="active" data-tab="signup">Запись</button>
       <button data-tab="people">Участники</button>
       <button data-tab="program">Программа</button>
+      <button data-tab="prep">Подготовка</button>
       <button data-tab="materials">Материалы</button>
     </nav>
   </div>
@@ -289,10 +411,46 @@
     </div>
     <div class="card">
       <p class="mat-title">Общая база — 3 занятия</p>
-      <p class="mat-note">Для всей группы, один поток.</p>
-      <div class="prog-item">1. Знакомство с AI: как это работает и как этим пользоваться</div>
-      <div class="prog-item">2. Claude Cowork: работа с файлами и данными</div>
-      <div class="prog-item">3. Claude Code: агенты кодинга для не-программистов</div>
+      <p class="mat-note">Для всей группы, один поток. Нажмите на занятие, чтобы увидеть его состав.</p>
+      <details class="prog">
+        <summary>1. Основы работы с AI и безопасность</summary>
+        <div class="sub-list">
+          <div class="sub-item">Как на самом деле работает AI: виды моделей, принцип работы LLM, контекстное окно</div>
+          <div class="sub-item">Популярные модели: OpenAI, Claude, Gemini и другие; сравнение платных подписок</div>
+          <div class="sub-item">Модели и обвязки: чем веб-чат отличается от автономных AI-инструментов</div>
+          <div class="sub-item">Работа с контекстом: как давать AI максимум полезной информации</div>
+          <div class="sub-item">Галлюцинации: почему AI уверенно ошибается и как это проверять</div>
+          <div class="sub-item">Безопасность данных: что нельзя загружать и как снижать риски</div>
+          <div class="sub-item">Практика работы с Claude: Projects, Skills, разбор договора и техзадания</div>
+          <div class="sub-item">Домашнее задание: попробовать AI на реальной рабочей задаче и подготовить файл к занятию 2</div>
+        </div>
+      </details>
+      <details class="prog">
+        <summary>2. AI для работы с файлами и данными</summary>
+        <div class="sub-list">
+          <div class="sub-item">Разбор домашнего задания: запросы участников и подготовленные файлы</div>
+          <div class="sub-item">Знакомство с Claude Cowork: режимы Chat / Cowork / Desktop, обзор моделей</div>
+          <div class="sub-item">Скиллы и плагины: готовые пакеты навыков и подключение внешних сервисов</div>
+          <div class="sub-item">Excel в Cowork: очистка выгрузок, сверки, план-факт, сводные отчёты</div>
+          <div class="sub-item">Word, PDF и конвертация форматов: извлечение текста и таблиц, сравнение версий</div>
+          <div class="sub-item">Cowork как AI-коллега: многошаговые задачи с папками файлов</div>
+          <div class="sub-item">Расширения Claude для Microsoft 365: Excel, Word, PowerPoint</div>
+          <div class="sub-item">Практика на материалах АС: перенос КП из PDF в Excel, сверка выгрузок, сводные отчёты</div>
+          <div class="sub-item">Домашнее задание: свести две рабочие выгрузки и получить список расхождений</div>
+        </div>
+      </details>
+      <details class="prog">
+        <summary>3. Агенты кодинга для не-программистов</summary>
+        <div class="sub-list">
+          <div class="sub-item">Разбор домашнего задания: результаты работы с Cowork и файлами</div>
+          <div class="sub-item">Что такое агенты кодинга: «программист» на базе AI и зачем он не-разработчику</div>
+          <div class="sub-item">Знакомство с Claude Code: Desktop, Mobile, CLI и что нужно для установки</div>
+          <div class="sub-item">Режимы работы и уровни автономности: от режима планирования до автопилота, защита секретов</div>
+          <div class="sub-item">Как AI подключается к внешним системам: интерфейсы, API-ключи, MCP</div>
+          <div class="sub-item">Практические кейсы на материалах АС: дашборд руководителя, офлайн-инструмент договоров, сбор цен, автоматические цепочки и отчёты по расписанию</div>
+          <div class="sub-item">Домашнее задание: описать процесс своего направления для полной автоматизации — лучшие работы станут основой отбора в трек ядра</div>
+        </div>
+      </details>
     </div>
     <div class="card">
       <p class="mat-title">Модули по направлениям — 5 занятий</p>
@@ -319,6 +477,244 @@
     </div>
   </section>
 
+  <section id="tab-prep" class="tab">
+    <div class="card">
+      <p class="mat-title">Подготовка к обучению</p>
+      <p class="mat-note">Чтобы практика шла на реальных задачах АС, а не на абстрактных примерах, нужны рабочие форматы документов подразделений. Конфиденциальные данные не нужны: суммы, объёмы, ФИО, контрагентов и реквизиты можно заменить на вымышленные — важно сохранить структуру и способ оформления файлов.</p>
+      <div class="card mat-card" style="margin:0; padding:18px 20px; background:var(--bg); box-shadow:none;">
+        <div class="mat-text">
+          <p class="mat-title" style="font-size:16px;">Готов файл — приложите его здесь</p>
+          <p class="mat-note">Файл попадёт в хранилище программы с пометкой, кто его передал.</p>
+        </div>
+        <a class="mat-link" href="#" id="uploadOpen">Приложить документ</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="mat-title">Главное требование к материалам</p>
+      <p class="mat-note">Нужна обезличенная копия рабочего документа или выгрузки, а не созданный заново «учебный пример». В файлах важно сохранить:</p>
+      <div class="prog-item">исходный формат: XLSX/CSV, DOCX, PDF, DWG, MPP, EML и т. п.;</div>
+      <div class="prog-item">реальные названия и порядок листов, колонок и разделов;</div>
+      <div class="prog-item">формулы, справочники, связи между листами и итоговые строки;</div>
+      <div class="prog-item">типичный объём: количество строк, листов и страниц;</div>
+      <div class="prog-item">особенности исходника: сканы, рукописный текст, неполные поля, ошибки и расхождения;</div>
+      <div class="prog-item">связь между файлами одного кейса.</div>
+      <p class="mat-note" style="margin:16px 0 0;">Если есть эталонный результат, выполненный вручную, — приложите его: по нему проверяется качество работы AI.</p>
+    </div>
+
+    <div class="card">
+      <p class="mat-title">Минимальный комплект для запуска</p>
+      <p class="mat-note">Нужен в первую очередь, независимо от набора модулей.</p>
+      <div class="chk">2–3 коммерческих предложения подрядчиков по одному лоту и базовая ВДЦ</div>
+      <div class="chk">две выгрузки одних и тех же данных из разных систем за один период</div>
+      <div class="chk">одна типичная сложная рабочая таблица с формулами и несколькими листами</div>
+      <div class="chk">исходный договор и версия этого же договора с правками контрагента</div>
+      <div class="chk">протокол производственного совещания и его аудиозапись или транскрипт</div>
+      <div class="chk">5–10 действующих регламентов или инструкций компании</div>
+      <div class="chk">два последовательных месяца табеля/ТУЗиО для сравнения периодов</div>
+      <div class="chk">заполненное описание набора от каждого подразделения</div>
+    </div>
+
+    <div class="card">
+      <p class="mat-title">Что нужно от каждого подразделения</p>
+      <p class="mat-note">Нажмите на своё направление, чтобы увидеть список.</p>
+      <details class="prog">
+        <summary>1. КРУ — контрольно-ревизионное управление</summary>
+        <div class="sub-list">
+          <div class="sub-head">Обязательно</div>
+          <div class="chk">ВДЦ по 3–5 подписанным договорам: разные объекты, даты и виды работ</div>
+          <div class="chk">карточка-описание к каждой ВДЦ: объект, дата, вид работ, единица измерения, версия</div>
+          <div class="chk">нормативные данные по видам работ: ГЭСН, ФЕР, внутренние нормы или иной справочник</div>
+          <div class="chk">связанный комплект для проверки спецификации: чертёж, спецификация, «шахматка» и ВДЦ подрядчика</div>
+          <div class="chk">КС, которые подгружаются в «шахматку»: 2–3 последовательных документа</div>
+          <div class="chk">табели/ТУЗиО за два месяца и правила проверки дополнительных начислений</div>
+          <div class="chk">реестры дополнительных начислений за тот же период: питание, проезд, проживание</div>
+          <div class="sub-head">Желательно</div>
+          <div class="chk">перечень 10–20 единиц редкого оборудования для проверки цен</div>
+          <div class="chk">список используемых сайтов и поставщиков</div>
+          <div class="chk">пример вручную выполненной проверки цены</div>
+        </div>
+      </details>
+      <details class="prog">
+        <summary>2. Отдел развития и сопровождения / внешние тендеры</summary>
+        <div class="sub-list">
+          <div class="sub-head">Обязательно</div>
+          <div class="chk">модель стоимости объекта в Excel с формулами и исходными показателями</div>
+          <div class="chk">таблица объектов-аналогов для сравнения стоимости и показателей</div>
+          <div class="chk">один полный альбом проектной документации или законченный раздел в PDF</div>
+          <div class="chk">две версии одного альбома для поиска изменений</div>
+          <div class="chk">спецификация или перечень оборудования к альбому, при наличии — эталонный результат</div>
+          <div class="chk">план расстановки с УГО и легендой: векторный PDF и скан</div>
+          <div class="chk">пример расчёта объёма материалов по чертежу с нормами расхода и итоговой таблицей</div>
+          <div class="chk">экспорт из Revit или Navisworks в Excel по одному виду работ</div>
+          <div class="sub-head">Желательно</div>
+          <div class="chk">таблица видов работ/WBS с расценками и трудоёмкостью</div>
+          <div class="chk">график производства работ и шаблон недельной доски задач</div>
+          <div class="chk">эскиз или схема и пример ожидаемой 3D-визуализации</div>
+          <div class="chk">комплект исходных данных по одному случаю экспресс-проектирования</div>
+        </div>
+      </details>
+      <details class="prog">
+        <summary>3. Фасадное направление</summary>
+        <div class="sub-list">
+          <div class="sub-head">Обязательно</div>
+          <div class="chk">одна типичная «тяжёлая» таблица: несколько корпусов, формулы, справочники, итоги (XLSX)</div>
+          <div class="chk">таблица-справочник стеклопакетов: тип, формула, габариты, правила расчёта</div>
+          <div class="chk">фрагмент витража/фасада, условные обозначения и итоговая Excel-спецификация</div>
+          <div class="chk">комплект фасадной документации в PDF и шаблон пояснительной записки</div>
+          <div class="chk">выгрузка замечаний из Sarex в Excel и соответствующий PDF проекта</div>
+          <div class="chk">3–5 КП по одному фасадному решению, техзадание и чек-лист сравнения</div>
+          <div class="chk">альбом технических решений, сертификаты и протоколы испытаний</div>
+          <div class="sub-head">Если включается инженерная оценка узлов</div>
+          <div class="chk">узел КМ/крепления, методика проверки, применяемые СП/ГОСТ, исходные данные и один выполненный расчёт</div>
+        </div>
+      </details>
+      <details class="prog">
+        <summary>4. Тендерный отдел / внутренние тендеры</summary>
+        <div class="sub-list">
+          <div class="sub-head">Обязательно</div>
+          <div class="chk">3–5 КП разных подрядчиков по одному лоту: исходные PDF и Excel</div>
+          <div class="chk">базовая ведомость договорной цены по тому же лоту</div>
+          <div class="chk">техническое задание и тендерный пакет, по которым готовились КП</div>
+          <div class="chk">пример принятой сводной таблицы или шаблон результата</div>
+          <div class="chk">текущий реестр подрядчиков в рабочем виде</div>
+          <div class="chk">2–3 заполненные анкеты подрядчиков и критерии оценки</div>
+          <div class="chk">перечень 20–30 материалов или оборудования для проверки цен</div>
+          <div class="chk">список проверенных сайтов-источников</div>
+          <div class="chk">график производства работ по объекту и шаблон графика тендеров</div>
+          <div class="sub-head">Для сценария контроля хода тендера</div>
+          <div class="chk">таблица статусов, участники и даты, обезличенная цепочка писем, письма-напоминания</div>
+        </div>
+      </details>
+      <details class="prog">
+        <summary>5. Финансовый отдел и экономисты проектов</summary>
+        <div class="sub-list">
+          <div class="sub-head">Обязательно</div>
+          <div class="chk">рабочая модель ДДС или отчёта о прибыли с формулами и сценариями</div>
+          <div class="chk">пара «план»–«факт» за один период и правила объяснения отклонений</div>
+          <div class="chk">два слепка одной модели на разные даты защиты бюджета</div>
+          <div class="chk">парные выгрузки из 1С Бухгалтерия и 1С УХ за одинаковый период</div>
+          <div class="chk">реестр договоров из Тезис и Google-таблица либо начисления из 1С ЗУП и табель</div>
+          <div class="chk">КС-2, КС-3 и накопительная КС-6 по одному объекту и пример проверки актов</div>
+          <div class="chk">текущие графики для руководителя и таблицы, из которых они строятся</div>
+          <div class="chk">5–10 актуальных регламентов и инструкций</div>
+          <div class="sub-head">Дополнительные блоки</div>
+          <div class="chk">собственные силы и СЭЗ: выгрузка 1С ЗУП и табель, списки сотрудников, реестры затрат, данные по выработке</div>
+          <div class="chk">законтрактованность: договор заказчика и подрядчиков с их ВДЦ, текущая ручная форма расчёта</div>
+        </div>
+      </details>
+      <details class="prog">
+        <summary>6. Планирование и отчётность / руководители проектов</summary>
+        <div class="sub-list">
+          <div class="sub-head">Обязательно</div>
+          <div class="chk">действующий график производства работ в исходном формате</div>
+          <div class="chk">фактические объёмы выполнения и контрольные даты по тому же объекту</div>
+          <div class="chk">вводные из тендера для графика подрядчика и пример графика для карточки Тезис</div>
+          <div class="chk">3–4 последовательных протокола совещаний по одному подрядчику</div>
+          <div class="chk">аудиозапись или транскрипт совещания и шаблон протокола</div>
+          <div class="chk">цепочка переписки по одному проблемному вопросу с договором и графиком</div>
+          <div class="chk">таблица фронтов работ и ограничений</div>
+          <div class="chk">набор данных по одному подрядчику для оценки надёжности: ОЖР, предписания, КС, протоколы</div>
+          <div class="sub-head">Для ассистента проектного офиса</div>
+          <div class="chk">паспорт проекта, якорный документ, чек-лист «готов к подписи», реестр вопросов, шаблоны дашборда и протокола, правила светофора</div>
+        </div>
+      </details>
+      <details class="prog">
+        <summary>7. Площадка / передача объектов / замечания</summary>
+        <div class="sub-list">
+          <div class="sub-head">Обязательно</div>
+          <div class="chk">чистый бланк полевого чек-листа и 5–10 сканов заполненных от руки</div>
+          <div class="chk">пример замечаний собственника и сводная таблица, куда они разносятся</div>
+          <div class="chk">справочник видов замечаний, участков и ответственных</div>
+          <div class="chk">шаблоны актов, уведомлений, предписаний и писем контрагентам</div>
+          <div class="chk">один завершённый кейс целиком: от поступивших замечаний до акта или претензии</div>
+          <div class="chk">пример выгрузки из стороннего ресурса по предписаниям и итоговый документ</div>
+        </div>
+      </details>
+      <details class="prog">
+        <summary>8. Юридический и договорной блок</summary>
+        <div class="sub-list">
+          <div class="sub-head">Обязательно</div>
+          <div class="chk">исходный договор в DOCX и версия с правками контрагента</div>
+          <div class="chk">один большой протокол разногласий, при возможности — резюме юриста</div>
+          <div class="chk">2–3 действующих шаблона договоров с метками подстановки</div>
+          <div class="chk">обезличенная Excel-база реквизитов контрагентов</div>
+          <div class="chk">готовый комплект документов по одному контрагенту</div>
+          <div class="chk">инструкция или skill для анализа правок и 2–3 примера с оценкой юриста</div>
+          <div class="chk">реестр мониторинга контрагентов или выгрузка из Контур.Фокус</div>
+          <div class="sub-head">Желательно</div>
+          <div class="chk">требования к договорам и платежам, стандарты переписки, шаблоны писем и претензий</div>
+        </div>
+      </details>
+      <details class="prog">
+        <summary>9. Трек ядра развития AI</summary>
+        <div class="sub-list">
+          <div class="sub-head">От каждого кандидата — один существующий инструмент или процесс</div>
+          <div class="chk">исходный код или экспорт проекта и инструкция по запуску</div>
+          <div class="chk">обезличенный пример входных данных и пример правильного результата</div>
+          <div class="chk">перечень известных ошибок и ручных проверок</div>
+          <div class="chk">описание пользователей, ролей, уведомлений и интеграций</div>
+          <div class="chk">журналы ошибок или обезличенные логи, если ведутся</div>
+          <div class="chk">где решение размещено и кто его поддерживает</div>
+          <div class="sub-head">Важно</div>
+          <div class="chk">пароли, API-ключи, токены и доступы к продуктивным системам в архив не включать</div>
+        </div>
+      </details>
+      <details class="prog">
+        <summary>10. От ИТ/ИБ и заказчика</summary>
+        <div class="sub-list">
+          <div class="chk">перечень тарифов Claude/ChatGPT и распределение подписок</div>
+          <div class="chk">список участников программы с подразделением и ролью</div>
+          <div class="chk">правила: какие данные можно и нельзя загружать во внешние AI-сервисы</div>
+          <div class="chk">решение ИБ по коннекторам к почте, календарю и диску</div>
+          <div class="chk">тестовый Google-аккаунт с обезличенными таблицами</div>
+          <div class="chk">права на установку и запуск ПО на компьютерах участников</div>
+          <div class="chk">перечень используемых систем и их форматов экспорта</div>
+          <div class="chk">подтверждение допустимости работы с обезличенной проектной документацией вне контура</div>
+          <div class="chk">перечень конфигураций 1С для потенциальных интеграций</div>
+          <p class="mat-note" style="margin:12px 0 0;">Доступ к продуктивным базам 1С, Тезис, Sarex не требуется — достаточно обезличенных выгрузок.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <p class="mat-title">Как подготовить и передать файлы</p>
+      <p class="mat-note">Рекомендуемая структура папок — по подразделениям, внутри отдельная папка на каждый связанный кейс:</p>
+      <pre class="tree">Материалы_для_программы_АС/
+├── 00_Описание_набора/
+├── 01_КРУ/
+├── 02_Развитие_и_внешние_тендеры/
+├── 03_Фасады/
+├── 04_Внутренние_тендеры/
+├── 05_Финансы/
+├── 06_Планирование_и_отчетность/
+├── 07_Площадка/
+├── 08_Юристы/
+└── 09_Трек_ядра/</pre>
+      <div class="sub-head">В описании каждого кейса указать</div>
+      <div class="prog-item">подразделение и ответственного за вопросы по файлам;</div>
+      <div class="prog-item">рабочую задачу и источник каждого файла;</div>
+      <div class="prog-item">какие файлы входные и какой — правильный результат;</div>
+      <div class="prog-item">что сейчас делается вручную и известные сложные места;</div>
+      <div class="prog-item">что в наборе обезличено или заменено.</div>
+      <div class="sub-head">Правила обезличивания</div>
+      <div class="prog-item">одинаковые сущности должны оставаться одинаковыми во всех связанных файлах;</div>
+      <div class="prog-item">суммы и объёмы менять пропорционально, сохранив логику и контрольные итоги;</div>
+      <div class="prog-item">не удалять формулы, скрытые листы, справочники и служебные колонки;</div>
+      <div class="prog-item">не сокращать документ до нескольких строк — нужен типичный объём;</div>
+      <div class="prog-item">PDF передавать в том виде, в котором он реально используется;</div>
+      <div class="prog-item">перед передачей удалить пароли, токены, ключи API и электронные подписи.</div>
+    </div>
+
+    <div class="card">
+      <p class="mat-title">Сроки</p>
+      <div class="prog-item">Полный комплект — не позднее чем за две недели до первого занятия.</div>
+      <div class="prog-item">Если сразу не получается — комплект каждого модуля за две недели до его занятия.</div>
+      <div class="prog-item">Материалы по проектной документации согласовывать первыми — им нужно больше времени со стороны ИБ.</div>
+      <div class="prog-item">Если что-то передать нельзя — отметить это в описании набора: сценарий подготовят на публичных данных.</div>
+    </div>
+  </section>
+
   <section id="tab-materials" class="tab">
     <div class="card mat-card">
       <div class="mat-text">
@@ -342,6 +738,22 @@
   </section>
 
 </main>
+
+<div class="overlay" id="uploadOverlay">
+  <div class="modal">
+    <p class="modal-title">Приложить документ</p>
+    <p class="lead">Файл будет сохранён в хранилище программы обучения.</p>
+    <label for="upFile">Документ</label>
+    <input id="upFile" type="file">
+    <label for="upSurname">Фамилия того, кто прикладывает</label>
+    <input id="upSurname" type="text" placeholder="Иванов" maxlength="100">
+    <label for="upDept">Отдел</label>
+    <select id="upDept"><option value="">Загрузка…</option></select>
+    <button class="btn" id="upSend">Отправить</button>
+    <button class="btn-ghost" id="upCancel">Отмена</button>
+    <div class="msg" id="upMsg"></div>
+  </div>
+</div>
 
 <script>
 const BASE = 'https://script.google.com/macros/s/AKfycbx4OoQXUlWmbVgfQbYkDM_S5YTFRuUuYOKbC03dajF33mIL9QsOCFaLY_GL3cYsTl--/exec';
@@ -383,13 +795,16 @@ async function fetchJson(url, options, tries) {
 
 // --- отрисовка ---
 function renderDepartments() {
-  const sel = document.getElementById('dept');
-  const current = sel.value;
-  sel.innerHTML = '<option value="">— выберите отдел —</option>' +
+  const options = '<option value="">— выберите отдел —</option>' +
     departments.map(function (d) {
       return '<option value="' + escapeHtml(d) + '">' + escapeHtml(d) + '</option>';
     }).join('');
-  if (current && departments.indexOf(current) !== -1) sel.value = current;
+  ['dept', 'upDept'].forEach(function (id) {
+    const sel = document.getElementById(id);
+    const current = sel.value;
+    sel.innerHTML = options;
+    if (current && departments.indexOf(current) !== -1) sel.value = current;
+  });
 }
 
 function renderParticipants() {
@@ -502,6 +917,85 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
   }
   btn.disabled = false;
   btn.textContent = 'Записаться';
+});
+
+// --- окно «Приложить документ» ---
+const MAX_FILE_MB = 20;
+const overlay = document.getElementById('uploadOverlay');
+
+document.getElementById('uploadOpen').addEventListener('click', function (e) {
+  e.preventDefault();
+  document.getElementById('upMsg').className = 'msg';
+  overlay.classList.add('open');
+});
+document.getElementById('upCancel').addEventListener('click', function () {
+  overlay.classList.remove('open');
+});
+overlay.addEventListener('click', function (e) {
+  if (e.target === overlay) overlay.classList.remove('open');
+});
+
+function readFileBase64(file) {
+  return new Promise(function (resolve, reject) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      const s = String(reader.result);
+      resolve(s.slice(s.indexOf(',') + 1));
+    };
+    reader.onerror = function () { reject(new Error('Не удалось прочитать файл')); };
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById('upSend').addEventListener('click', async function () {
+  const fileInput = document.getElementById('upFile');
+  const surname = document.getElementById('upSurname').value.trim();
+  const dept = document.getElementById('upDept').value;
+  const msg = document.getElementById('upMsg');
+  const btn = this;
+  msg.className = 'msg';
+
+  const file = fileInput.files && fileInput.files[0];
+  if (!file) { msg.className = 'msg err'; msg.textContent = 'Выберите файл.'; return; }
+  if (file.size > MAX_FILE_MB * 1024 * 1024) {
+    msg.className = 'msg err';
+    msg.textContent = 'Файл больше ' + MAX_FILE_MB + ' МБ — передайте его другим способом.';
+    return;
+  }
+  if (surname.length < 2) { msg.className = 'msg err'; msg.textContent = 'Укажите фамилию.'; return; }
+  if (!dept) { msg.className = 'msg err'; msg.textContent = 'Выберите отдел.'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Отправляем…';
+  try {
+    const base64 = await readFileBase64(file);
+    const data = await fetchJson(BASE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        action: 'upload',
+        surname: surname,
+        dept: dept,
+        fileName: file.name,
+        mimeType: file.type || 'application/octet-stream',
+        data: base64
+      })
+    }, 1);
+    if (data.ok) {
+      msg.className = 'msg ok';
+      msg.textContent = 'Готово! Документ «' + file.name + '» передан.';
+      fileInput.value = '';
+      document.getElementById('upSurname').value = '';
+    } else {
+      msg.className = 'msg err';
+      msg.textContent = data.error || 'Не удалось отправить файл, попробуйте ещё раз.';
+    }
+  } catch (e) {
+    msg.className = 'msg err';
+    msg.textContent = 'Ошибка сети: ' + e.message + '. Попробуйте ещё раз.';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Отправить';
 });
 
 load();
