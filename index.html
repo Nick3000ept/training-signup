@@ -200,6 +200,16 @@
     letter-spacing: -0.01em;
     border-top: 1px solid rgba(0, 0, 0, .06);
   }
+  .up-file {
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    word-break: break-word;
+  }
+  .up-meta {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
   .placeholder { color: var(--muted); font-size: 16px; letter-spacing: -0.01em; }
   .mat-title {
     font-size: 19px;
@@ -738,6 +748,11 @@
       </div>
       <a class="mat-link" href="https://antonanton.any.org/obuchenie-ii-alfa-stroy" target="_blank" rel="noopener">Открыть</a>
     </div>
+    <div class="card">
+      <p class="mat-title">Приложенные документы</p>
+      <p class="mat-note">Материалы, которые подразделения передали для подготовки программы (через кнопку «Приложить документ» на вкладке «Подготовка»).</p>
+    </div>
+    <div id="uploadsList" class="loading">Загрузка списка…</div>
   </section>
 
 </main>
@@ -764,6 +779,7 @@ const CACHE_KEY = 'training_signup_snapshot_v1';
 
 let departments = [];
 let participants = [];
+let uploads = [];
 
 // --- вкладки ---
 document.querySelectorAll('nav button').forEach(function (btn) {
@@ -846,11 +862,44 @@ function escapeHtml(s) {
   });
 }
 
+function renderUploads() {
+  const box = document.getElementById('uploadsList');
+  box.classList.remove('loading');
+  if (!uploads.length) {
+    box.innerHTML = '<p class="placeholder">Пока ничего не приложено.</p>';
+    return;
+  }
+  const groups = {};
+  uploads.forEach(function (u) {
+    const dept = u.dept || 'Без отдела';
+    if (!groups[dept]) groups[dept] = [];
+    groups[dept].push(u);
+  });
+  const order = departments.filter(function (d) { return groups[d]; });
+  Object.keys(groups).forEach(function (d) {
+    if (order.indexOf(d) === -1) order.push(d);
+  });
+  let html = '';
+  order.forEach(function (dept) {
+    const files = groups[dept];
+    html += '<div class="dept-group"><div class="dept-title"><span>' + escapeHtml(dept) +
+      '</span><span class="cnt">' + files.length + '</span></div>';
+    files.forEach(function (u) {
+      html += '<div class="person"><div class="up-file">' + escapeHtml(u.file) +
+        '</div><div class="up-meta">' + escapeHtml(u.surname) + ' · ' + escapeHtml(u.date) + '</div></div>';
+    });
+    html += '</div>';
+  });
+  box.innerHTML = html;
+}
+
 function applySnapshot(data) {
   departments = data.departments || [];
   participants = data.participants || [];
+  uploads = data.uploads || [];
   renderDepartments();
   renderParticipants();
+  renderUploads();
 }
 
 // --- загрузка ---
@@ -905,7 +954,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
       participants = data.participants || participants;
       renderParticipants();
       try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({ departments: departments, participants: participants }));
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ departments: departments, participants: participants, uploads: uploads }));
       } catch (e) {}
       msg.className = 'msg ok';
       msg.textContent = 'Готово! Вы записаны: ' + fio + ' — ' + dept + '.';
@@ -987,8 +1036,17 @@ document.getElementById('upSend').addEventListener('click', async function () {
       })
     }, 1);
     if (data.ok) {
+      if (data.uploads) {
+        uploads = data.uploads;
+        renderUploads();
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            departments: departments, participants: participants, uploads: uploads
+          }));
+        } catch (e2) {}
+      }
       msg.className = 'msg ok';
-      msg.textContent = 'Готово! Документ «' + file.name + '» передан.';
+      msg.textContent = 'Готово! Документ «' + file.name + '» передан — он появится в списке на вкладке «Материалы».';
       fileInput.value = '';
       document.getElementById('upSurname').value = '';
     } else {

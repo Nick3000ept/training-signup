@@ -60,7 +60,8 @@ function doGet(e) {
       return json_({
         ok: true,
         departments: getDepartments_(sheets.deptSheet),
-        participants: getParticipants_(sheets.partSheet)
+        participants: getParticipants_(sheets.partSheet),
+        uploads: getUploads_()
       });
     }
     return json_({ ok: true, pong: true });
@@ -135,7 +136,7 @@ function handleUpload_(data) {
 
   const logSheet = getUploadSheet_();
   logSheet.appendRow([new Date(), surname, dept, fileName, file.getUrl()]);
-  return json_({ ok: true });
+  return json_({ ok: true, uploads: getUploads_() });
 }
 
 function getUploadFolder_() {
@@ -143,19 +144,45 @@ function getUploadFolder_() {
   return it.hasNext() ? it.next() : DriveApp.createFolder(UPLOAD_FOLDER_NAME);
 }
 
-function getUploadSheet_() {
-  const ss = SpreadsheetApp.openById(SHEET_ID);
+function findUploadSheet_(ss) {
   let sheet = null;
   ss.getSheets().forEach(function (sh) {
     const a1 = String(sh.getRange(1, 1).getValue()).trim().toLowerCase();
     if (!sheet && a1 === 'дата загрузки') sheet = sh;
   });
+  return sheet;
+}
+
+function getUploadSheet_() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  let sheet = findUploadSheet_(ss);
   if (!sheet) {
     sheet = ss.insertSheet(UPLOAD_SHEET_NAME);
     sheet.getRange(1, 1, 1, 5)
       .setValues([['Дата загрузки', 'Фамилия', 'Отдел', 'Файл', 'Ссылка']]);
   }
   return sheet;
+}
+
+/** Список загрузок для сайта: без ссылок на Диск (они не публичные). */
+function getUploads_() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = findUploadSheet_(ss);
+  if (!sheet) return [];
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return [];
+  const rows = sheet.getRange(2, 1, lastRow - 1, 4).getValues();
+  return rows
+    .map(function (r) {
+      const d = r[0];
+      return {
+        date: (d && d.getTime) ? Utilities.formatDate(d, 'Europe/Moscow', 'dd.MM.yyyy HH:mm') : String(d).trim(),
+        surname: String(r[1]).trim(),
+        dept: String(r[2]).trim(),
+        file: String(r[3]).trim()
+      };
+    })
+    .filter(function (u) { return u.file !== ''; });
 }
 
 /** Экранирование пользовательского ввода перед записью в ячейку. */
