@@ -127,7 +127,6 @@ function handleUpload_(data) {
   const base64 = String(data.data || '');
 
   if (!surname || surname.length < 2) return json_({ ok: false, error: 'Укажите фамилию' });
-  if (!dept) return json_({ ok: false, error: 'Выберите отдел' });
   if (!folder || UPLOAD_SUBFOLDERS.indexOf(folder) === -1) {
     return json_({ ok: false, error: 'Выберите раздел программы' });
   }
@@ -135,12 +134,6 @@ function handleUpload_(data) {
   if (!base64) return json_({ ok: false, error: 'Файл пустой или не передан' });
   if (base64.length > MAX_UPLOAD_BASE64_CHARS) {
     return json_({ ok: false, error: 'Файл больше 20 МБ' });
-  }
-
-  const sheets = resolveSheets_();
-  const departments = getDepartments_(sheets.deptSheet);
-  if (departments.indexOf(dept) === -1) {
-    return json_({ ok: false, error: 'Такого отдела нет в списке' });
   }
 
   let bytes;

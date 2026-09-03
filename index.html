@@ -218,6 +218,13 @@
     color: var(--muted);
     margin-top: 3px;
   }
+  .up-hint {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: -0.005em;
+    line-height: 1.55;
+    margin-top: 8px;
+  }
   .placeholder { color: var(--muted); font-size: 16px; letter-spacing: -0.01em; }
   .mat-title {
     font-size: 19px;
@@ -761,8 +768,6 @@
     <input id="upFile" type="file">
     <label for="upSurname">Фамилия того, кто прикладывает</label>
     <input id="upSurname" type="text" placeholder="Иванов" maxlength="100">
-    <label for="upDept">Отдел</label>
-    <select id="upDept"><option value="">Загрузка…</option></select>
     <label for="upFolder">Раздел программы</label>
     <select id="upFolder">
       <option value="">— выберите раздел —</option>
@@ -779,7 +784,21 @@
       <option value="10_ИТ_ИБ">10 — ИТ/ИБ</option>
     </select>
     <label for="upDesc">Описание кейса</label>
-    <textarea id="upDesc" maxlength="2000" placeholder="Рабочая задача; источник файла и период; какие файлы входные, а какой — правильный результат; что сейчас делается вручную; что обезличено или заменено"></textarea>
+    <textarea id="upDesc" maxlength="2000" placeholder="Опишите кейс — пункты ниже подскажут, что указать"></textarea>
+    <div class="up-hint">
+      В описании кейса достаточно внести:
+      <div>— Подразделение</div>
+      <div>— Ответственный за вопросы по файлам</div>
+      <div>— Рабочая задача</div>
+      <div>— Источник каждого файла/система</div>
+      <div>— Период или версия</div>
+      <div>— Какие файлы являются входными</div>
+      <div>— Какой файл является правильным результатом</div>
+      <div>— Что сейчас делается вручную</div>
+      <div>— Известные ошибки и сложные места</div>
+      <div>— Что считается хорошим результатом</div>
+      <div>— Что в наборе обезличено или заменено</div>
+    </div>
     <button class="btn" id="upSend">Отправить</button>
     <button class="btn-ghost" id="upCancel">Отмена</button>
     <div class="msg" id="upMsg"></div>
@@ -827,16 +846,13 @@ async function fetchJson(url, options, tries) {
 
 // --- отрисовка ---
 function renderDepartments() {
-  const options = '<option value="">— выберите отдел —</option>' +
+  const sel = document.getElementById('dept');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— выберите отдел —</option>' +
     departments.map(function (d) {
       return '<option value="' + escapeHtml(d) + '">' + escapeHtml(d) + '</option>';
     }).join('');
-  ['dept', 'upDept'].forEach(function (id) {
-    const sel = document.getElementById(id);
-    const current = sel.value;
-    sel.innerHTML = options;
-    if (current && departments.indexOf(current) !== -1) sel.value = current;
-  });
+  if (current && departments.indexOf(current) !== -1) sel.value = current;
 }
 
 function renderParticipants() {
@@ -884,24 +900,20 @@ function renderUploads() {
   }
   const groups = {};
   uploads.forEach(function (u) {
-    const dept = u.dept || 'Без отдела';
-    if (!groups[dept]) groups[dept] = [];
-    groups[dept].push(u);
-  });
-  const order = departments.filter(function (d) { return groups[d]; });
-  Object.keys(groups).forEach(function (d) {
-    if (order.indexOf(d) === -1) order.push(d);
+    const key = u.folder || 'Без раздела';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(u);
   });
   let html = '';
-  order.forEach(function (dept) {
-    const files = groups[dept];
-    html += '<div class="dept-group"><div class="dept-title"><span>' + escapeHtml(dept) +
+  Object.keys(groups).sort().forEach(function (key) {
+    const files = groups[key];
+    html += '<div class="dept-group"><div class="dept-title"><span>' + escapeHtml(key.replace(/_/g, ' ')) +
       '</span><span class="cnt">' + files.length + '</span></div>';
     files.forEach(function (u) {
       html += '<div class="person"><div class="up-file">' + escapeHtml(u.file) + '</div>' +
         (u.desc ? '<div class="up-desc">' + escapeHtml(u.desc) + '</div>' : '') +
         '<div class="up-meta">' + escapeHtml(u.surname) + ' · ' + escapeHtml(u.date) +
-        (u.folder ? ' · ' + escapeHtml(u.folder.replace(/_/g, ' ')) : '') + '</div></div>';
+        (u.dept ? ' · ' + escapeHtml(u.dept) : '') + '</div></div>';
     });
     html += '</div>';
   });
@@ -1020,7 +1032,6 @@ function readFileBase64(file) {
 document.getElementById('upSend').addEventListener('click', async function () {
   const fileInput = document.getElementById('upFile');
   const surname = document.getElementById('upSurname').value.trim();
-  const dept = document.getElementById('upDept').value;
   const folder = document.getElementById('upFolder').value;
   const desc = document.getElementById('upDesc').value.trim();
   const msg = document.getElementById('upMsg');
@@ -1035,7 +1046,6 @@ document.getElementById('upSend').addEventListener('click', async function () {
     return;
   }
   if (surname.length < 2) { msg.className = 'msg err'; msg.textContent = 'Укажите фамилию.'; return; }
-  if (!dept) { msg.className = 'msg err'; msg.textContent = 'Выберите отдел.'; return; }
   if (!folder) { msg.className = 'msg err'; msg.textContent = 'Выберите раздел программы.'; return; }
 
   btn.disabled = true;
@@ -1048,7 +1058,6 @@ document.getElementById('upSend').addEventListener('click', async function () {
       body: JSON.stringify({
         action: 'upload',
         surname: surname,
-        dept: dept,
         folder: folder,
         desc: desc,
         fileName: file.name,
