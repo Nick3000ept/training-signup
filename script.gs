@@ -8,7 +8,20 @@
  */
 
 const SHEET_ID = '1LZOXlwmEaJHBQ8HE59LWpmlgkWGcvRVxvoyIti6BKrg';
-const UPLOAD_FOLDER_NAME = 'Обучение ИИ — материалы от подразделений';
+const UPLOAD_FOLDER_NAME = 'Материалы_для_программы_АС';
+const UPLOAD_SUBFOLDERS = [
+  '00_Описание_набора',
+  '01_КРУ',
+  '02_Развитие_и_внешние_тендеры',
+  '03_Фасады',
+  '04_Внутренние_тендеры',
+  '05_Финансы',
+  '06_Планирование_и_отчетность',
+  '07_Площадка',
+  '08_Юристы',
+  '09_Трек_ядра',
+  '10_ИТ_ИБ'
+];
 const UPLOAD_SHEET_NAME = 'Загрузки';
 // ~20 МБ файла в base64 (base64 длиннее исходника примерно на треть)
 const MAX_UPLOAD_BASE64_CHARS = 28 * 1024 * 1024;
@@ -109,10 +122,15 @@ function handleUpload_(data) {
   const surname = safeCell_(data.surname);
   const dept = safeCell_(data.dept);
   const fileName = safeCell_(String(data.fileName || '').slice(0, 150));
+  const desc = safeCell_(data.desc, 2000);
+  const folder = String(data.folder || '').trim();
   const base64 = String(data.data || '');
 
   if (!surname || surname.length < 2) return json_({ ok: false, error: 'Укажите фамилию' });
   if (!dept) return json_({ ok: false, error: 'Выберите отдел' });
+  if (!folder || UPLOAD_SUBFOLDERS.indexOf(folder) === -1) {
+    return json_({ ok: false, error: 'Выберите раздел программы' });
+  }
   if (!fileName) return json_({ ok: false, error: 'Не передано имя файла' });
   if (!base64) return json_({ ok: false, error: 'Файл пустой или не передан' });
   if (base64.length > MAX_UPLOAD_BASE64_CHARS) {
@@ -132,16 +150,23 @@ function handleUpload_(data) {
     return json_({ ok: false, error: 'Файл повреждён при передаче, попробуйте ещё раз' });
   }
   const blob = Utilities.newBlob(bytes, String(data.mimeType || 'application/octet-stream'), fileName);
-  const file = getUploadFolder_().createFile(blob);
+  const file = getSubFolder_(folder).createFile(blob);
 
   const logSheet = getUploadSheet_();
-  logSheet.appendRow([new Date(), surname, dept, fileName, file.getUrl()]);
+  logSheet.appendRow([new Date(), surname, dept, fileName, file.getUrl(), desc, folder]);
   return json_({ ok: true, uploads: getUploads_() });
 }
 
 function getUploadFolder_() {
   const it = DriveApp.getFoldersByName(UPLOAD_FOLDER_NAME);
   return it.hasNext() ? it.next() : DriveApp.createFolder(UPLOAD_FOLDER_NAME);
+}
+
+/** Папка раздела внутри корневой (создаётся при первом файле раздела). */
+function getSubFolder_(name) {
+  const root = getUploadFolder_();
+  const it = root.getFoldersByName(name);
+  return it.hasNext() ? it.next() : root.createFolder(name);
 }
 
 function findUploadSheet_(ss) {
@@ -158,9 +183,11 @@ function getUploadSheet_() {
   let sheet = findUploadSheet_(ss);
   if (!sheet) {
     sheet = ss.insertSheet(UPLOAD_SHEET_NAME);
-    sheet.getRange(1, 1, 1, 5)
-      .setValues([['Дата загрузки', 'Фамилия', 'Отдел', 'Файл', 'Ссылка']]);
+    sheet.getRange(1, 1, 1, 7)
+      .setValues([['Дата загрузки', 'Фамилия', 'Отдел', 'Файл', 'Ссылка', 'Описание', 'Раздел']]);
   }
+  if (String(sheet.getRange(1, 6).getValue()).trim() === '') sheet.getRange(1, 6).setValue('Описание');
+  if (String(sheet.getRange(1, 7).getValue()).trim() === '') sheet.getRange(1, 7).setValue('Раздел');
   return sheet;
 }
 
@@ -171,7 +198,7 @@ function getUploads_() {
   if (!sheet) return [];
   const lastRow = sheet.getLastRow();
   if (lastRow < 2) return [];
-  const rows = sheet.getRange(2, 1, lastRow - 1, 4).getValues();
+  const rows = sheet.getRange(2, 1, lastRow - 1, 7).getValues();
   return rows
     .map(function (r) {
       const d = r[0];
@@ -179,15 +206,17 @@ function getUploads_() {
         date: (d && d.getTime) ? Utilities.formatDate(d, 'Europe/Moscow', 'dd.MM.yyyy HH:mm') : String(d).trim(),
         surname: String(r[1]).trim(),
         dept: String(r[2]).trim(),
-        file: String(r[3]).trim()
+        file: String(r[3]).trim(),
+        desc: String(r[5]).trim(),
+        folder: String(r[6]).trim()
       };
     })
     .filter(function (u) { return u.file !== ''; });
 }
 
 /** Экранирование пользовательского ввода перед записью в ячейку. */
-function safeCell_(v) {
-  let s = String(v == null ? '' : v).trim().slice(0, 200);
+function safeCell_(v, maxLen) {
+  let s = String(v == null ? '' : v).trim().slice(0, maxLen || 200);
   if (/^[=+\-@]/.test(s)) s = "'" + s;
   return s;
 }

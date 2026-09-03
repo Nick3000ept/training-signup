@@ -100,7 +100,7 @@
     margin: 18px 0 7px;
   }
   label:first-of-type { margin-top: 0; }
-  input, select {
+  input, select, textarea {
     width: 100%;
     padding: 13px 14px;
     font-size: 17px;
@@ -114,13 +114,14 @@
     -webkit-appearance: none;
     transition: border-color .15s ease, box-shadow .15s ease;
   }
+  textarea { resize: vertical; min-height: 96px; font-size: 15px; }
   select {
     background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%236e6e73' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
     padding-right: 40px;
   }
-  input:focus, select:focus {
+  input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: var(--blue);
     box-shadow: 0 0 0 4px rgba(0, 113, 227, .15);
@@ -204,6 +205,13 @@
     font-size: 15px;
     letter-spacing: -0.01em;
     word-break: break-word;
+  }
+  .up-desc {
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-top: 4px;
+    white-space: pre-line;
   }
   .up-meta {
     font-size: 13px;
@@ -511,7 +519,7 @@
           <div class="chk">перечень 10–20 единиц редкого оборудования для проверки цен</div>
           <div class="chk">список используемых сайтов и поставщиков</div>
           <div class="chk">пример вручную выполненной проверки цены</div>
-          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#">Приложить документ</a></div>
+          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#" data-folder="01_КРУ">Приложить документ</a></div>
         </div>
       </details>
       <details class="prog">
@@ -531,7 +539,7 @@
           <div class="chk">график производства работ и шаблон недельной доски задач</div>
           <div class="chk">эскиз или схема и пример ожидаемой 3D-визуализации</div>
           <div class="chk">комплект исходных данных по одному случаю экспресс-проектирования</div>
-          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#">Приложить документ</a></div>
+          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#" data-folder="02_Развитие_и_внешние_тендеры">Приложить документ</a></div>
         </div>
       </details>
       <details class="prog">
@@ -547,7 +555,7 @@
           <div class="chk">альбом технических решений, сертификаты и протоколы испытаний</div>
           <div class="sub-head">Если включается инженерная оценка узлов</div>
           <div class="chk">узел КМ/крепления, методика проверки, применяемые СП/ГОСТ, исходные данные и один выполненный расчёт</div>
-          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#">Приложить документ</a></div>
+          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#" data-folder="03_Фасады">Приложить документ</a></div>
         </div>
       </details>
       <details class="prog">
@@ -565,7 +573,7 @@
           <div class="chk">график производства работ по объекту и шаблон графика тендеров</div>
           <div class="sub-head">Для сценария контроля хода тендера</div>
           <div class="chk">таблица статусов, участники и даты, обезличенная цепочка писем, письма-напоминания</div>
-          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#">Приложить документ</a></div>
+          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#" data-folder="04_Внутренние_тендеры">Приложить документ</a></div>
         </div>
       </details>
       <details class="prog">
@@ -583,7 +591,7 @@
           <div class="sub-head">Дополнительные блоки</div>
           <div class="chk">собственные силы и СЭЗ: выгрузка 1С ЗУП и табель, списки сотрудников, реестры затрат, данные по выработке</div>
           <div class="chk">законтрактованность: договор заказчика и подрядчиков с их ВДЦ, текущая ручная форма расчёта</div>
-          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#">Приложить документ</a></div>
+          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#" data-folder="05_Финансы">Приложить документ</a></div>
         </div>
       </details>
       <details class="prog">
@@ -600,7 +608,7 @@
           <div class="chk">набор данных по одному подрядчику для оценки надёжности: ОЖР, предписания, КС, протоколы</div>
           <div class="sub-head">Для ассистента проектного офиса</div>
           <div class="chk">паспорт проекта, якорный документ, чек-лист «готов к подписи», реестр вопросов, шаблоны дашборда и протокола, правила светофора</div>
-          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#">Приложить документ</a></div>
+          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#" data-folder="06_Планирование_и_отчетность">Приложить документ</a></div>
         </div>
       </details>
       <details class="prog">
@@ -613,7 +621,7 @@
           <div class="chk">шаблоны актов, уведомлений, предписаний и писем контрагентам</div>
           <div class="chk">один завершённый кейс целиком: от поступивших замечаний до акта или претензии</div>
           <div class="chk">пример выгрузки из стороннего ресурса по предписаниям и итоговый документ</div>
-          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#">Приложить документ</a></div>
+          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#" data-folder="07_Площадка">Приложить документ</a></div>
         </div>
       </details>
       <details class="prog">
@@ -629,7 +637,7 @@
           <div class="chk">реестр мониторинга контрагентов или выгрузка из Контур.Фокус</div>
           <div class="sub-head">Желательно</div>
           <div class="chk">требования к договорам и платежам, стандарты переписки, шаблоны писем и претензий</div>
-          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#">Приложить документ</a></div>
+          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#" data-folder="08_Юристы">Приложить документ</a></div>
         </div>
       </details>
       <details class="prog">
@@ -644,7 +652,7 @@
           <div class="chk">где решение размещено и кто его поддерживает</div>
           <div class="sub-head">Важно</div>
           <div class="chk">пароли, API-ключи, токены и доступы к продуктивным системам в архив не включать</div>
-          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#">Приложить документ</a></div>
+          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#" data-folder="09_Трек_ядра">Приложить документ</a></div>
         </div>
       </details>
       <details class="prog">
@@ -660,7 +668,7 @@
           <div class="chk">подтверждение допустимости работы с обезличенной проектной документацией вне контура</div>
           <div class="chk">перечень конфигураций 1С для потенциальных интеграций</div>
           <p class="mat-note" style="margin:12px 0 0;">Доступ к продуктивным базам 1С, Тезис, Sarex не требуется — достаточно обезличенных выгрузок.</p>
-          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#">Приложить документ</a></div>
+          <div style="padding:12px 0 4px;"><a class="mat-link upload-open" href="#" data-folder="10_ИТ_ИБ">Приложить документ</a></div>
         </div>
       </details>
     </div>
@@ -692,19 +700,7 @@
 
     <div class="card">
       <p class="mat-title">Как подготовить и передать файлы</p>
-      <p class="mat-note">Рекомендуемая структура папок — по подразделениям, внутри отдельная папка на каждый связанный кейс:</p>
-      <pre class="tree">Материалы_для_программы_АС/
-├── 00_Описание_набора/
-├── 01_КРУ/
-├── 02_Развитие_и_внешние_тендеры/
-├── 03_Фасады/
-├── 04_Внутренние_тендеры/
-├── 05_Финансы/
-├── 06_Планирование_и_отчетность/
-├── 07_Площадка/
-├── 08_Юристы/
-└── 09_Трек_ядра/</pre>
-      <div class="sub-head">В описании каждого кейса указать</div>
+      <div class="sub-head" style="padding-top:0;">В описании каждого кейса указать</div>
       <div class="prog-item">подразделение и ответственного за вопросы по файлам;</div>
       <div class="prog-item">рабочую задачу и источник каждого файла;</div>
       <div class="prog-item">какие файлы входные и какой — правильный результат;</div>
@@ -767,6 +763,23 @@
     <input id="upSurname" type="text" placeholder="Иванов" maxlength="100">
     <label for="upDept">Отдел</label>
     <select id="upDept"><option value="">Загрузка…</option></select>
+    <label for="upFolder">Раздел программы</label>
+    <select id="upFolder">
+      <option value="">— выберите раздел —</option>
+      <option value="00_Описание_набора">00 — Описание набора</option>
+      <option value="01_КРУ">01 — КРУ</option>
+      <option value="02_Развитие_и_внешние_тендеры">02 — Развитие и внешние тендеры</option>
+      <option value="03_Фасады">03 — Фасады</option>
+      <option value="04_Внутренние_тендеры">04 — Внутренние тендеры</option>
+      <option value="05_Финансы">05 — Финансы</option>
+      <option value="06_Планирование_и_отчетность">06 — Планирование и отчётность</option>
+      <option value="07_Площадка">07 — Площадка</option>
+      <option value="08_Юристы">08 — Юристы</option>
+      <option value="09_Трек_ядра">09 — Трек ядра</option>
+      <option value="10_ИТ_ИБ">10 — ИТ/ИБ</option>
+    </select>
+    <label for="upDesc">Описание кейса</label>
+    <textarea id="upDesc" maxlength="2000" placeholder="Рабочая задача; источник файла и период; какие файлы входные, а какой — правильный результат; что сейчас делается вручную; что обезличено или заменено"></textarea>
     <button class="btn" id="upSend">Отправить</button>
     <button class="btn-ghost" id="upCancel">Отмена</button>
     <div class="msg" id="upMsg"></div>
@@ -885,8 +898,10 @@ function renderUploads() {
     html += '<div class="dept-group"><div class="dept-title"><span>' + escapeHtml(dept) +
       '</span><span class="cnt">' + files.length + '</span></div>';
     files.forEach(function (u) {
-      html += '<div class="person"><div class="up-file">' + escapeHtml(u.file) +
-        '</div><div class="up-meta">' + escapeHtml(u.surname) + ' · ' + escapeHtml(u.date) + '</div></div>';
+      html += '<div class="person"><div class="up-file">' + escapeHtml(u.file) + '</div>' +
+        (u.desc ? '<div class="up-desc">' + escapeHtml(u.desc) + '</div>' : '') +
+        '<div class="up-meta">' + escapeHtml(u.surname) + ' · ' + escapeHtml(u.date) +
+        (u.folder ? ' · ' + escapeHtml(u.folder.replace(/_/g, ' ')) : '') + '</div></div>';
     });
     html += '</div>';
   });
@@ -979,6 +994,7 @@ document.querySelectorAll('.upload-open').forEach(function (link) {
   link.addEventListener('click', function (e) {
     e.preventDefault();
     document.getElementById('upMsg').className = 'msg';
+    if (link.dataset.folder) document.getElementById('upFolder').value = link.dataset.folder;
     overlay.classList.add('open');
   });
 });
@@ -1005,6 +1021,8 @@ document.getElementById('upSend').addEventListener('click', async function () {
   const fileInput = document.getElementById('upFile');
   const surname = document.getElementById('upSurname').value.trim();
   const dept = document.getElementById('upDept').value;
+  const folder = document.getElementById('upFolder').value;
+  const desc = document.getElementById('upDesc').value.trim();
   const msg = document.getElementById('upMsg');
   const btn = this;
   msg.className = 'msg';
@@ -1018,6 +1036,7 @@ document.getElementById('upSend').addEventListener('click', async function () {
   }
   if (surname.length < 2) { msg.className = 'msg err'; msg.textContent = 'Укажите фамилию.'; return; }
   if (!dept) { msg.className = 'msg err'; msg.textContent = 'Выберите отдел.'; return; }
+  if (!folder) { msg.className = 'msg err'; msg.textContent = 'Выберите раздел программы.'; return; }
 
   btn.disabled = true;
   btn.textContent = 'Отправляем…';
@@ -1030,6 +1049,8 @@ document.getElementById('upSend').addEventListener('click', async function () {
         action: 'upload',
         surname: surname,
         dept: dept,
+        folder: folder,
+        desc: desc,
         fileName: file.name,
         mimeType: file.type || 'application/octet-stream',
         data: base64
@@ -1049,6 +1070,7 @@ document.getElementById('upSend').addEventListener('click', async function () {
       msg.textContent = 'Готово! Документ «' + file.name + '» передан — он появится в списке на вкладке «Материалы».';
       fileInput.value = '';
       document.getElementById('upSurname').value = '';
+      document.getElementById('upDesc').value = '';
     } else {
       msg.className = 'msg err';
       msg.textContent = data.error || 'Не удалось отправить файл, попробуйте ещё раз.';
