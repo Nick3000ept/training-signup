@@ -127,14 +127,22 @@
     box-shadow: 0 0 0 4px rgba(0, 113, 227, .15);
   }
   ::placeholder { color: #aeaeb2; }
+  /* главная галочка формы — крупно и на подложке, чтобы её нельзя было пропустить (просьба владельца 2026-10-04) */
   label.check {
-    display: flex; align-items: flex-start; gap: 10px;
-    margin: 20px 0 0; font-size: 15px; font-weight: 400; color: var(--text); cursor: pointer;
+    display: flex; align-items: center; gap: 16px;
+    margin: 24px 0 0; padding: 18px 20px;
+    font-size: 19px; font-weight: 600; line-height: 1.3; color: var(--text); cursor: pointer;
+    background: rgba(0, 113, 227, .08); border: 2px solid var(--blue); border-radius: 14px;
+    transition: background .15s, border-color .15s;
   }
+  label.check:hover { background: rgba(0, 113, 227, .13); }
+  label.check:has(input:checked) { background: rgba(52, 199, 89, .12); border-color: #34c759; }
   label.check input {
-    width: 20px; height: 20px; flex-shrink: 0; margin: 1px 0 0; padding: 0;
+    width: 30px; height: 30px; flex-shrink: 0; margin: 0; padding: 0;
     appearance: auto; -webkit-appearance: checkbox; accent-color: var(--blue); cursor: pointer;
   }
+  label.check:has(input:checked) input { accent-color: #34c759; }
+  @media (max-width: 480px) { label.check { font-size: 17px; gap: 12px; padding: 14px 16px; } label.check input { width: 26px; height: 26px; } }
   .btn {
     margin-top: 24px;
     width: 100%;
