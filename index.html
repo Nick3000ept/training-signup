@@ -141,6 +141,7 @@
     width: 30px; height: 30px; flex-shrink: 0; margin: 0; padding: 0;
     appearance: auto; -webkit-appearance: auto; accent-color: var(--blue); cursor: pointer;
   }
+  .check-sub { display: block; margin-top: 2px; font-size: 15px; font-weight: 400; color: var(--muted); }
   label.check:has(input:checked) input { accent-color: #34c759; }
   @media (max-width: 480px) { label.check { font-size: 17px; gap: 12px; padding: 14px 16px; } label.check input { width: 26px; height: 26px; } }
   .btn {
@@ -448,13 +449,13 @@
       </select>
       <label for="aiText">Расскажите о своём опыте <span style="font-weight:400;">(необязательно)</span></label>
       <textarea id="aiText" rows="3" maxlength="1000" placeholder="Какими сервисами пользуетесь (ChatGPT, Claude, DeepSeek…) и для каких задач"></textarea>
-      <label style="margin-top:20px;">Как с вами связываться</label>
-      <label class="check" style="margin-top:4px;"><input type="radio" name="contact" value="tg"> Прошу пригласить меня в группу в Telegram</label>
+      <label style="margin-top:20px;">Формат обучения</label>
+      <label class="check" style="margin-top:4px;"><input type="radio" name="contact" value="tg"> <span>Полный<span class="check-sub">Прошу добавить меня в группу в Telegram</span></span></label>
       <div id="phoneBox" style="display:none;">
         <label for="phone">Телефон, к которому привязан Telegram</label>
         <input id="phone" type="tel" placeholder="+7 900 123-45-67" maxlength="20" autocomplete="tel">
       </div>
-      <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="mail"> В группу вступать не буду, прошу присылать всю информацию на почту</label>
+      <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="mail"> <span>Только вебинары<span class="check-sub">Прошу отправлять мне ссылки на вебинары на почту</span></span></label>
       <button class="btn" id="saveBtn">Записаться</button>
       <div class="msg" id="saveMsg"></div>
     </div>
@@ -1168,7 +1169,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
   const contactEl = document.querySelector('input[name="contact"]:checked');
   const contact = contactEl ? contactEl.value : '';
   const phone = document.getElementById('phone').value.trim();
-  if (!contact) { msg.className = 'msg err'; msg.textContent = 'Выберите, как с вами связываться: группа в Telegram или почта.'; return; }
+  if (!contact) { msg.className = 'msg err'; msg.textContent = 'Выберите формат обучения: полный или только вебинары.'; return; }
   if (contact === 'tg' && !/^\+?[\d\s\-()]{10,20}$/.test(phone)) { msg.className = 'msg err'; msg.textContent = 'Укажите телефон, к которому привязан Telegram.'; return; }
 
   btn.disabled = true;

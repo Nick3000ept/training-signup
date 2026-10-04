@@ -19,8 +19,8 @@ const AI_LEVELS = [
   'Делаю свои инструменты с ИИ (проекты, скрипты, автоматизации)'
 ];
 const CONTACT_OPTIONS = {
-  tg: 'Прошу пригласить меня в группу в Telegram',
-  mail: 'В группу вступать не буду, прошу присылать всю информацию на почту'
+  tg: 'Полный: прошу добавить меня в группу в Telegram',
+  mail: 'Только вебинары: прошу отправлять мне ссылки на вебинары на почту'
 };
 const UPLOAD_FOLDER_NAME = 'Материалы_для_программы_АС';
 const UPLOAD_SUBFOLDERS = [
@@ -119,7 +119,7 @@ function doPost(e) {
     if (AI_LEVELS.indexOf(aiLevel) === -1) return json_({ ok: false, error: 'Выберите свой опыт работы с ИИ' });
     const aiText = safeCell_(data.aiText, 1000);
     const contact = CONTACT_OPTIONS[data.contact];
-    if (!contact) return json_({ ok: false, error: 'Выберите, как с вами связываться' });
+    if (!contact) return json_({ ok: false, error: 'Выберите формат обучения' });
     let phone = '';
     if (data.contact === 'tg') {
       phone = String(data.phone || '').trim();
