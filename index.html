@@ -139,7 +139,7 @@
   label.check:has(input:checked) { background: rgba(52, 199, 89, .12); border-color: #34c759; }
   label.check input {
     width: 30px; height: 30px; flex-shrink: 0; margin: 0; padding: 0;
-    appearance: auto; -webkit-appearance: checkbox; accent-color: var(--blue); cursor: pointer;
+    appearance: auto; -webkit-appearance: auto; accent-color: var(--blue); cursor: pointer;
   }
   label.check:has(input:checked) input { accent-color: #34c759; }
   @media (max-width: 480px) { label.check { font-size: 17px; gap: 12px; padding: 14px 16px; } label.check input { width: 26px; height: 26px; } }
@@ -448,7 +448,13 @@
       </select>
       <label for="aiText">Расскажите о своём опыте <span style="font-weight:400;">(необязательно)</span></label>
       <textarea id="aiText" rows="3" maxlength="1000" placeholder="Какими сервисами пользуетесь (ChatGPT, Claude, DeepSeek…) и для каких задач"></textarea>
-      <label class="check"><input type="checkbox" id="joinReq"> Прошу включить меня в группу по обучению ИИ</label>
+      <label style="margin-top:20px;">Как с вами связываться</label>
+      <label class="check" style="margin-top:4px;"><input type="radio" name="contact" value="tg"> Прошу пригласить меня в группу в Telegram</label>
+      <div id="phoneBox" style="display:none;">
+        <label for="phone">Телефон, к которому привязан Telegram</label>
+        <input id="phone" type="tel" placeholder="+7 900 123-45-67" maxlength="20" autocomplete="tel">
+      </div>
+      <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="mail"> В группу вступать не буду, прошу присылать всю информацию на почту</label>
       <button class="btn" id="saveBtn">Записаться</button>
       <div class="msg" id="saveMsg"></div>
     </div>
@@ -1137,6 +1143,11 @@ function showLoadError(text) {
 }
 
 // --- запись ---
+document.querySelectorAll('input[name="contact"]').forEach(function (r) {
+  r.addEventListener('change', function () {
+    document.getElementById('phoneBox').style.display = this.value === 'tg' ? 'block' : 'none';
+  });
+});
 document.getElementById('saveBtn').addEventListener('click', async function () {
   const fio = document.getElementById('fio').value.trim();
   const email = document.getElementById('email').value.trim();
@@ -1154,7 +1165,11 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
   if (!dept) { msg.className = 'msg err'; msg.textContent = 'Выберите отдел.'; return; }
   if (!sub) { msg.className = 'msg err'; msg.textContent = 'Выберите, нужна ли подписка.'; return; }
   if (!aiLevel) { msg.className = 'msg err'; msg.textContent = 'Выберите свой опыт работы с ИИ.'; return; }
-  if (!document.getElementById('joinReq').checked) { msg.className = 'msg err'; msg.textContent = 'Поставьте галочку «Прошу включить меня в группу по обучению ИИ».'; return; }
+  const contactEl = document.querySelector('input[name="contact"]:checked');
+  const contact = contactEl ? contactEl.value : '';
+  const phone = document.getElementById('phone').value.trim();
+  if (!contact) { msg.className = 'msg err'; msg.textContent = 'Выберите, как с вами связываться: группа в Telegram или почта.'; return; }
+  if (contact === 'tg' && !/^\+?[\d\s\-()]{10,20}$/.test(phone)) { msg.className = 'msg err'; msg.textContent = 'Укажите телефон, к которому привязан Telegram.'; return; }
 
   btn.disabled = true;
   btn.textContent = 'Записываем…';
@@ -1162,7 +1177,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
     const data = await fetchJson(BASE, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ action: 'save', fio: fio, email: email, dept: dept, sub: sub, aiLevel: aiLevel, aiText: aiText, joinReq: true })
+      body: JSON.stringify({ action: 'save', fio: fio, email: email, dept: dept, sub: sub, aiLevel: aiLevel, aiText: aiText, contact: contact, phone: contact === 'tg' ? phone : '' })
     }, 2);
     if (data.ok) {
       participants = data.participants || participants;
@@ -1177,7 +1192,9 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
       document.getElementById('sub').value = '';
       document.getElementById('aiLevel').value = '';
       document.getElementById('aiText').value = '';
-      document.getElementById('joinReq').checked = false;
+      document.querySelectorAll('input[name="contact"]').forEach(function (r) { r.checked = false; });
+      document.getElementById('phone').value = '';
+      document.getElementById('phoneBox').style.display = 'none';
     } else {
       msg.className = 'msg err';
       msg.textContent = data.error || 'Не удалось записаться, попробуйте ещё раз.';

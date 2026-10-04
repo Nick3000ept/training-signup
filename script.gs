@@ -4,8 +4,8 @@
  * Листы находятся по заголовкам (устойчиво к переименованию):
  *  - лист отделов: A1 = "Подразделение", отделы в колонке A ниже;
  *  - лист участников: первая строка содержит "ФИО" и "Отдел".
- * Запись — только добавление строк [ФИО, Отдел, Почта, Подписка, Уровень ИИ, Опыт ИИ, Заявка] на лист участников
- * (колонки «Почта», «Подписка», «Уровень ИИ», «Опыт ИИ», «Заявка» ищутся по заголовку, при отсутствии заголовок дописывается
+ * Запись — только добавление строк [ФИО, Отдел, Почта, Подписка, Уровень ИИ, Опыт ИИ, Заявка, Телефон] на лист участников
+ * (колонки «Почта», «Подписка», «Уровень ИИ», «Опыт ИИ», «Заявка», «Телефон» ищутся по заголовку, при отсутствии заголовок дописывается
  * в первую свободную колонку). Почта на сайт не отдаётся.
  */
 
@@ -18,6 +18,10 @@ const AI_LEVELS = [
   'Пользуюсь регулярно в работе (таблицы, документы, анализ)',
   'Делаю свои инструменты с ИИ (проекты, скрипты, автоматизации)'
 ];
+const CONTACT_OPTIONS = {
+  tg: 'Прошу пригласить меня в группу в Telegram',
+  mail: 'В группу вступать не буду, прошу присылать всю информацию на почту'
+};
 const UPLOAD_FOLDER_NAME = 'Материалы_для_программы_АС';
 const UPLOAD_SUBFOLDERS = [
   '00_Описание_набора',
@@ -114,7 +118,16 @@ function doPost(e) {
     const aiLevel = String(data.aiLevel || '').trim();
     if (AI_LEVELS.indexOf(aiLevel) === -1) return json_({ ok: false, error: 'Выберите свой опыт работы с ИИ' });
     const aiText = safeCell_(data.aiText, 1000);
-    if (data.joinReq !== true) return json_({ ok: false, error: 'Поставьте галочку «Прошу включить меня в группу по обучению ИИ»' });
+    const contact = CONTACT_OPTIONS[data.contact];
+    if (!contact) return json_({ ok: false, error: 'Выберите, как с вами связываться' });
+    let phone = '';
+    if (data.contact === 'tg') {
+      phone = String(data.phone || '').trim();
+      if (!/^\+?[\d\s\-()]{10,20}$/.test(phone) || phone.replace(/\D/g, '').length < 10) {
+        return json_({ ok: false, error: 'Укажите телефон, к которому привязан Telegram' });
+      }
+      phone = "'" + phone; // чтобы таблица не превратила номер в число или формулу
+    }
 
     const sheets = resolveSheets_();
     const departments = getDepartments_(sheets.deptSheet);
@@ -135,6 +148,7 @@ function doPost(e) {
     const lvlCol = findOrAddCol_(sheets.partSheet, header, ['уровень ии'], 'Уровень ИИ');
     const expCol = findOrAddCol_(sheets.partSheet, header, ['опыт ии'], 'Опыт ИИ');
     const reqCol = findOrAddCol_(sheets.partSheet, header, ['заявка'], 'Заявка');
+    const phoneCol = findOrAddCol_(sheets.partSheet, header, ['телефон'], 'Телефон');
     const row = [];
     row[header.indexOf('фио')] = fio;
     row[header.indexOf('отдел')] = dept;
@@ -142,7 +156,8 @@ function doPost(e) {
     row[subCol] = sub;
     row[lvlCol] = aiLevel;
     row[expCol] = aiText;
-    row[reqCol] = 'Прошу включить в группу ' + Utilities.formatDate(new Date(), 'Europe/Moscow', 'dd.MM.yyyy HH:mm');
+    row[reqCol] = contact + ' (' + Utilities.formatDate(new Date(), 'Europe/Moscow', 'dd.MM.yyyy HH:mm') + ')';
+    row[phoneCol] = phone;
     for (let i = 0; i < row.length; i++) if (row[i] === undefined) row[i] = '';
     sheets.partSheet.appendRow(row);
     return json_({ ok: true, participants: getParticipants_(sheets.partSheet) });
