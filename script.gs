@@ -4,13 +4,20 @@
  * Листы находятся по заголовкам (устойчиво к переименованию):
  *  - лист отделов: A1 = "Подразделение", отделы в колонке A ниже;
  *  - лист участников: первая строка содержит "ФИО" и "Отдел".
- * Запись — только добавление строк [ФИО, Отдел, Почта, Подписка] на лист участников
- * (колонки «Почта» и «Подписка» ищутся по заголовку, при отсутствии заголовок дописывается
+ * Запись — только добавление строк [ФИО, Отдел, Почта, Подписка, Уровень ИИ, Опыт ИИ] на лист участников
+ * (колонки «Почта», «Подписка», «Уровень ИИ», «Опыт ИИ» ищутся по заголовку, при отсутствии заголовок дописывается
  * в первую свободную колонку). Почта на сайт не отдаётся.
  */
 
 const SHEET_ID = '1LZOXlwmEaJHBQ8HE59LWpmlgkWGcvRVxvoyIti6BKrg';
 const SUB_OPTIONS = ['Не нужна', 'Есть своя подписка', 'Нужна подписка на Claude', 'Нужна подписка на ChatGPT', 'Нужны обе: Claude и ChatGPT'];
+const AI_LEVELS = [
+  'Не пользовался',
+  'Пробовал пару раз (задавал вопросы в чате)',
+  'Пользуюсь иногда для простых задач (письмо, перевод, пересказ)',
+  'Пользуюсь регулярно в работе (таблицы, документы, анализ)',
+  'Делаю свои инструменты с ИИ (проекты, скрипты, автоматизации)'
+];
 const UPLOAD_FOLDER_NAME = 'Материалы_для_программы_АС';
 const UPLOAD_SUBFOLDERS = [
   '00_Описание_набора',
@@ -104,6 +111,9 @@ function doPost(e) {
     }
     const sub = String(data.sub || '').trim();
     if (SUB_OPTIONS.indexOf(sub) === -1) return json_({ ok: false, error: 'Выберите, нужна ли подписка' });
+    const aiLevel = String(data.aiLevel || '').trim();
+    if (AI_LEVELS.indexOf(aiLevel) === -1) return json_({ ok: false, error: 'Выберите свой опыт работы с ИИ' });
+    const aiText = safeCell_(data.aiText, 1000);
 
     const sheets = resolveSheets_();
     const departments = getDepartments_(sheets.deptSheet);
@@ -121,11 +131,15 @@ function doPost(e) {
       .map(function (v) { return String(v).trim().toLowerCase(); });
     const mailCol = findOrAddCol_(sheets.partSheet, header, ['почта', 'e-mail', 'email'], 'Почта');
     const subCol = findOrAddCol_(sheets.partSheet, header, ['подписка'], 'Подписка');
+    const lvlCol = findOrAddCol_(sheets.partSheet, header, ['уровень ии'], 'Уровень ИИ');
+    const expCol = findOrAddCol_(sheets.partSheet, header, ['опыт ии'], 'Опыт ИИ');
     const row = [];
     row[header.indexOf('фио')] = fio;
     row[header.indexOf('отдел')] = dept;
     row[mailCol] = safeCell_(email);
     row[subCol] = sub;
+    row[lvlCol] = aiLevel;
+    row[expCol] = aiText;
     for (let i = 0; i < row.length; i++) if (row[i] === undefined) row[i] = '';
     sheets.partSheet.appendRow(row);
     return json_({ ok: true, participants: getParticipants_(sheets.partSheet) });
