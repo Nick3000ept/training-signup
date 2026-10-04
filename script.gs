@@ -10,7 +10,7 @@
  */
 
 const SHEET_ID = '1LZOXlwmEaJHBQ8HE59LWpmlgkWGcvRVxvoyIti6BKrg';
-const SUB_OPTIONS = ['Не нужна', 'Нужна подписка на Claude', 'Нужна подписка на ChatGPT'];
+const SUB_OPTIONS = ['Не нужна', 'Нужна подписка на Claude', 'Нужна подписка на ChatGPT', 'Нужны обе: Claude и ChatGPT'];
 const UPLOAD_FOLDER_NAME = 'Материалы_для_программы_АС';
 const UPLOAD_SUBFOLDERS = [
   '00_Описание_набора',
