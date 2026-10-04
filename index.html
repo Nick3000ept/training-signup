@@ -457,8 +457,8 @@
       </div>
       <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="mail"> <span>Онлайн-вебинары<span class="check-sub">Прошу присылать ссылки на вебинары на почту</span></span></label>
       <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="rec"> <span>Записи вебинаров<span class="check-sub">Прошу присылать мне записи вебинаров</span></span></label>
-      <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="none"> <span>Обучение не нужно</span></label>
-      <button class="btn" id="saveBtn">Записаться</button>
+      <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="none"> <span>Обучение не нужно<span class="check-sub">Хочу только оформить подписку, дальше буду разбираться сам</span></span></label>
+      <button class="btn" id="saveBtn">Отправить</button>
       <div class="msg" id="saveMsg"></div>
     </div>
   </section>
@@ -1175,7 +1175,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
   if (contact === 'tg' && !/^\+?[\d\s\-()]{10,20}$/.test(phone)) { msg.className = 'msg err'; msg.textContent = 'Укажите телефон, к которому привязан Telegram.'; return; }
 
   btn.disabled = true;
-  btn.textContent = 'Записываем…';
+  btn.textContent = 'Отправляем…';
   try {
     const data = await fetchJson(BASE, {
       method: 'POST',
@@ -1207,7 +1207,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
     msg.textContent = 'Ошибка сети: ' + e.message + '. Попробуйте ещё раз.';
   }
   btn.disabled = false;
-  btn.textContent = 'Записаться';
+  btn.textContent = 'Отправить';
 });
 
 // --- окно «Приложить документ» ---
