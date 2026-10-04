@@ -449,14 +449,14 @@
       </select>
       <label for="aiText">Расскажите о своём опыте <span style="font-weight:400;">(необязательно)</span></label>
       <textarea id="aiText" rows="3" maxlength="1000" placeholder="Какими сервисами пользуетесь (ChatGPT, Claude, DeepSeek…) и для каких задач"></textarea>
-      <label style="margin-top:20px;">Формат обучения</label>
-      <label class="check" style="margin-top:4px;"><input type="radio" name="contact" value="tg"> <span>Полный<span class="check-sub">Прошу добавить меня в группу в Telegram</span></span></label>
+      <label style="margin-top:24px; font-size:19px; color:var(--text);">Формат обучения</label>
+      <label class="check" style="margin-top:4px;"><input type="radio" name="contact" value="tg"> <span>Полный<span class="check-sub">Онлайн-вебинары, домашние задания, вопросы. Прошу добавить меня в группу в Telegram</span></span></label>
       <div id="phoneBox" style="display:none;">
         <label for="phone">Телефон, к которому привязан Telegram</label>
         <input id="phone" type="tel" placeholder="+7 900 123-45-67" maxlength="20" autocomplete="tel">
       </div>
-      <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="mail"> <span>Только онлайн-вебинары<span class="check-sub">В обучение полностью не включаюсь — хочу только присутствовать на онлайн-вебинарах. Ссылки прошу присылать на почту</span></span></label>
-      <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="rec"> <span>Только записи вебинаров<span class="check-sub">Хочу смотреть только записи вебинаров</span></span></label>
+      <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="mail"> <span>Онлайн-вебинары<span class="check-sub">Прошу присылать ссылки на вебинары на почту</span></span></label>
+      <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="rec"> <span>Записи вебинаров<span class="check-sub">Прошу присылать мне записи вебинаров</span></span></label>
       <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="none"> <span>Обучение не нужно</span></label>
       <button class="btn" id="saveBtn">Записаться</button>
       <div class="msg" id="saveMsg"></div>
