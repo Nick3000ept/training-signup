@@ -4,7 +4,9 @@
  * Листы находятся по заголовкам (устойчиво к переименованию):
  *  - лист отделов: A1 = "Подразделение", отделы в колонке A ниже;
  *  - лист участников: первая строка содержит "ФИО" и "Отдел".
- * Запись — только добавление строк [ФИО, Отдел] на лист участников.
+ * Запись — только добавление строк [ФИО, Отдел, Почта] на лист участников
+ * (колонка «Почта» ищется по заголовку, при отсутствии заголовок дописывается
+ * в первую свободную колонку). Почта на сайт не отдаётся.
  */
 
 const SHEET_ID = '1LZOXlwmEaJHBQ8HE59LWpmlgkWGcvRVxvoyIti6BKrg';
@@ -94,6 +96,11 @@ function doPost(e) {
     if (!fio || fio.length < 3) return json_({ ok: false, error: 'Укажите ФИО' });
     if (fio.length > 100) return json_({ ok: false, error: 'Слишком длинное ФИО' });
     if (!dept) return json_({ ok: false, error: 'Выберите отдел' });
+    const email = String(data.email || '').trim().toLowerCase();
+    if (!email) return json_({ ok: false, error: 'Укажите почту' });
+    if (email.length > 100 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return json_({ ok: false, error: 'Почта указана с ошибкой' });
+    }
 
     const sheets = resolveSheets_();
     const departments = getDepartments_(sheets.deptSheet);
@@ -107,7 +114,22 @@ function doPost(e) {
     });
     if (dupe) return json_({ ok: false, error: 'Вы уже записаны (' + fio + ', ' + dept + ')' });
 
-    sheets.partSheet.appendRow([fio, dept]);
+    const header = sheets.partSheet.getRange(1, 1, 1, sheets.partSheet.getLastColumn()).getValues()[0]
+      .map(function (v) { return String(v).trim().toLowerCase(); });
+    let mailCol = -1;
+    ['почта', 'e-mail', 'email'].forEach(function (h) {
+      if (mailCol === -1 && header.indexOf(h) !== -1) mailCol = header.indexOf(h);
+    });
+    if (mailCol === -1) {
+      mailCol = header.length;
+      sheets.partSheet.getRange(1, mailCol + 1).setValue('Почта');
+    }
+    const row = [];
+    row[header.indexOf('фио')] = fio;
+    row[header.indexOf('отдел')] = dept;
+    row[mailCol] = safeCell_(email);
+    for (let i = 0; i < row.length; i++) if (row[i] === undefined) row[i] = '';
+    sheets.partSheet.appendRow(row);
     return json_({ ok: true, participants: getParticipants_(sheets.partSheet) });
   } catch (err) {
     return json_({ ok: false, error: String(err && err.message || err) });

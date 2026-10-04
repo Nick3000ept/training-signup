@@ -404,9 +404,11 @@
 
   <section id="tab-signup" class="tab active">
     <div class="card">
-      <p class="lead">Укажите своё ФИО и выберите отдел — и вы в списке участников.</p>
+      <p class="lead">Укажите своё ФИО, рабочую почту и выберите отдел — и вы в списке участников.</p>
       <label for="fio">ФИО</label>
       <input id="fio" type="text" placeholder="Иванов Иван Иванович" maxlength="100" autocomplete="name">
+      <label for="email">Почта</label>
+      <input id="email" type="email" placeholder="ivanov@example.ru" maxlength="100" autocomplete="email">
       <label for="dept">Отдел</label>
       <select id="dept"><option value="">Загрузка…</option></select>
       <button class="btn" id="saveBtn">Записаться</button>
@@ -1077,12 +1079,15 @@ function showLoadError(text) {
 // --- запись ---
 document.getElementById('saveBtn').addEventListener('click', async function () {
   const fio = document.getElementById('fio').value.trim();
+  const email = document.getElementById('email').value.trim();
   const dept = document.getElementById('dept').value;
   const msg = document.getElementById('saveMsg');
   const btn = this;
   msg.className = 'msg';
 
   if (fio.length < 3) { msg.className = 'msg err'; msg.textContent = 'Укажите ФИО.'; return; }
+  if (!email) { msg.className = 'msg err'; msg.textContent = 'Укажите почту.'; return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = 'msg err'; msg.textContent = 'Проверьте почту — в ней ошибка.'; return; }
   if (!dept) { msg.className = 'msg err'; msg.textContent = 'Выберите отдел.'; return; }
 
   btn.disabled = true;
@@ -1091,7 +1096,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
     const data = await fetchJson(BASE, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ action: 'save', fio: fio, dept: dept })
+      body: JSON.stringify({ action: 'save', fio: fio, email: email, dept: dept })
     }, 2);
     if (data.ok) {
       participants = data.participants || participants;
@@ -1102,6 +1107,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
       msg.className = 'msg ok';
       msg.textContent = 'Готово! Вы записаны: ' + fio + ' — ' + dept + '.';
       document.getElementById('fio').value = '';
+      document.getElementById('email').value = '';
     } else {
       msg.className = 'msg err';
       msg.textContent = data.error || 'Не удалось записаться, попробуйте ещё раз.';
