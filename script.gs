@@ -4,8 +4,8 @@
  * Листы находятся по заголовкам (устойчиво к переименованию):
  *  - лист отделов: A1 = "Подразделение", отделы в колонке A ниже;
  *  - лист участников: первая строка содержит "ФИО" и "Отдел".
- * Запись — только добавление строк [ФИО, Отдел, Почта, Подписка, Уровень ИИ, Опыт ИИ] на лист участников
- * (колонки «Почта», «Подписка», «Уровень ИИ», «Опыт ИИ» ищутся по заголовку, при отсутствии заголовок дописывается
+ * Запись — только добавление строк [ФИО, Отдел, Почта, Подписка, Уровень ИИ, Опыт ИИ, Заявка] на лист участников
+ * (колонки «Почта», «Подписка», «Уровень ИИ», «Опыт ИИ», «Заявка» ищутся по заголовку, при отсутствии заголовок дописывается
  * в первую свободную колонку). Почта на сайт не отдаётся.
  */
 
@@ -114,6 +114,7 @@ function doPost(e) {
     const aiLevel = String(data.aiLevel || '').trim();
     if (AI_LEVELS.indexOf(aiLevel) === -1) return json_({ ok: false, error: 'Выберите свой опыт работы с ИИ' });
     const aiText = safeCell_(data.aiText, 1000);
+    if (data.joinReq !== true) return json_({ ok: false, error: 'Поставьте галочку «Прошу включить меня в группу по обучению ИИ»' });
 
     const sheets = resolveSheets_();
     const departments = getDepartments_(sheets.deptSheet);
@@ -133,6 +134,7 @@ function doPost(e) {
     const subCol = findOrAddCol_(sheets.partSheet, header, ['подписка'], 'Подписка');
     const lvlCol = findOrAddCol_(sheets.partSheet, header, ['уровень ии'], 'Уровень ИИ');
     const expCol = findOrAddCol_(sheets.partSheet, header, ['опыт ии'], 'Опыт ИИ');
+    const reqCol = findOrAddCol_(sheets.partSheet, header, ['заявка'], 'Заявка');
     const row = [];
     row[header.indexOf('фио')] = fio;
     row[header.indexOf('отдел')] = dept;
@@ -140,6 +142,7 @@ function doPost(e) {
     row[subCol] = sub;
     row[lvlCol] = aiLevel;
     row[expCol] = aiText;
+    row[reqCol] = 'Прошу включить в группу ' + Utilities.formatDate(new Date(), 'Europe/Moscow', 'dd.MM.yyyy HH:mm');
     for (let i = 0; i < row.length; i++) if (row[i] === undefined) row[i] = '';
     sheets.partSheet.appendRow(row);
     return json_({ ok: true, participants: getParticipants_(sheets.partSheet) });

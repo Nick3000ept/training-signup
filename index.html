@@ -127,6 +127,14 @@
     box-shadow: 0 0 0 4px rgba(0, 113, 227, .15);
   }
   ::placeholder { color: #aeaeb2; }
+  label.check {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin: 20px 0 0; font-size: 15px; font-weight: 400; color: var(--text); cursor: pointer;
+  }
+  label.check input {
+    width: 20px; height: 20px; flex-shrink: 0; margin: 1px 0 0; padding: 0;
+    appearance: auto; -webkit-appearance: checkbox; accent-color: var(--blue); cursor: pointer;
+  }
   .btn {
     margin-top: 24px;
     width: 100%;
@@ -432,6 +440,7 @@
       </select>
       <label for="aiText">Расскажите о своём опыте <span style="font-weight:400;">(необязательно)</span></label>
       <textarea id="aiText" rows="3" maxlength="1000" placeholder="Какими сервисами пользуетесь (ChatGPT, Claude, DeepSeek…) и для каких задач"></textarea>
+      <label class="check"><input type="checkbox" id="joinReq"> Прошу включить меня в группу по обучению ИИ</label>
       <button class="btn" id="saveBtn">Записаться</button>
       <div class="msg" id="saveMsg"></div>
     </div>
@@ -1137,6 +1146,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
   if (!dept) { msg.className = 'msg err'; msg.textContent = 'Выберите отдел.'; return; }
   if (!sub) { msg.className = 'msg err'; msg.textContent = 'Выберите, нужна ли подписка.'; return; }
   if (!aiLevel) { msg.className = 'msg err'; msg.textContent = 'Выберите свой опыт работы с ИИ.'; return; }
+  if (!document.getElementById('joinReq').checked) { msg.className = 'msg err'; msg.textContent = 'Поставьте галочку «Прошу включить меня в группу по обучению ИИ».'; return; }
 
   btn.disabled = true;
   btn.textContent = 'Записываем…';
@@ -1144,7 +1154,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
     const data = await fetchJson(BASE, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ action: 'save', fio: fio, email: email, dept: dept, sub: sub, aiLevel: aiLevel, aiText: aiText })
+      body: JSON.stringify({ action: 'save', fio: fio, email: email, dept: dept, sub: sub, aiLevel: aiLevel, aiText: aiText, joinReq: true })
     }, 2);
     if (data.ok) {
       participants = data.participants || participants;
@@ -1159,6 +1169,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
       document.getElementById('sub').value = '';
       document.getElementById('aiLevel').value = '';
       document.getElementById('aiText').value = '';
+      document.getElementById('joinReq').checked = false;
     } else {
       msg.className = 'msg err';
       msg.textContent = data.error || 'Не удалось записаться, попробуйте ещё раз.';
