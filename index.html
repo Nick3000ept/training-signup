@@ -411,6 +411,13 @@
       <input id="email" type="email" placeholder="ivanov@example.ru" maxlength="100" autocomplete="email">
       <label for="dept">Отдел</label>
       <select id="dept"><option value="">Загрузка…</option></select>
+      <label for="sub">Нужна ли подписка</label>
+      <select id="sub">
+        <option value="">— выберите —</option>
+        <option>Не нужна</option>
+        <option>Нужна подписка на Claude</option>
+        <option>Нужна подписка на ChatGPT</option>
+      </select>
       <button class="btn" id="saveBtn">Записаться</button>
       <div class="msg" id="saveMsg"></div>
     </div>
@@ -1081,6 +1088,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
   const fio = document.getElementById('fio').value.trim();
   const email = document.getElementById('email').value.trim();
   const dept = document.getElementById('dept').value;
+  const sub = document.getElementById('sub').value;
   const msg = document.getElementById('saveMsg');
   const btn = this;
   msg.className = 'msg';
@@ -1089,6 +1097,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
   if (!email) { msg.className = 'msg err'; msg.textContent = 'Укажите почту.'; return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = 'msg err'; msg.textContent = 'Проверьте почту — в ней ошибка.'; return; }
   if (!dept) { msg.className = 'msg err'; msg.textContent = 'Выберите отдел.'; return; }
+  if (!sub) { msg.className = 'msg err'; msg.textContent = 'Выберите, нужна ли подписка.'; return; }
 
   btn.disabled = true;
   btn.textContent = 'Записываем…';
@@ -1096,7 +1105,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
     const data = await fetchJson(BASE, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ action: 'save', fio: fio, email: email, dept: dept })
+      body: JSON.stringify({ action: 'save', fio: fio, email: email, dept: dept, sub: sub })
     }, 2);
     if (data.ok) {
       participants = data.participants || participants;
@@ -1108,6 +1117,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
       msg.textContent = 'Готово! Вы записаны: ' + fio + ' — ' + dept + '.';
       document.getElementById('fio').value = '';
       document.getElementById('email').value = '';
+      document.getElementById('sub').value = '';
     } else {
       msg.className = 'msg err';
       msg.textContent = data.error || 'Не удалось записаться, попробуйте ещё раз.';

@@ -4,12 +4,13 @@
  * Листы находятся по заголовкам (устойчиво к переименованию):
  *  - лист отделов: A1 = "Подразделение", отделы в колонке A ниже;
  *  - лист участников: первая строка содержит "ФИО" и "Отдел".
- * Запись — только добавление строк [ФИО, Отдел, Почта] на лист участников
- * (колонка «Почта» ищется по заголовку, при отсутствии заголовок дописывается
+ * Запись — только добавление строк [ФИО, Отдел, Почта, Подписка] на лист участников
+ * (колонки «Почта» и «Подписка» ищутся по заголовку, при отсутствии заголовок дописывается
  * в первую свободную колонку). Почта на сайт не отдаётся.
  */
 
 const SHEET_ID = '1LZOXlwmEaJHBQ8HE59LWpmlgkWGcvRVxvoyIti6BKrg';
+const SUB_OPTIONS = ['Не нужна', 'Нужна подписка на Claude', 'Нужна подписка на ChatGPT'];
 const UPLOAD_FOLDER_NAME = 'Материалы_для_программы_АС';
 const UPLOAD_SUBFOLDERS = [
   '00_Описание_набора',
@@ -101,6 +102,8 @@ function doPost(e) {
     if (email.length > 100 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return json_({ ok: false, error: 'Почта указана с ошибкой' });
     }
+    const sub = String(data.sub || '').trim();
+    if (SUB_OPTIONS.indexOf(sub) === -1) return json_({ ok: false, error: 'Выберите, нужна ли подписка' });
 
     const sheets = resolveSheets_();
     const departments = getDepartments_(sheets.deptSheet);
@@ -116,24 +119,33 @@ function doPost(e) {
 
     const header = sheets.partSheet.getRange(1, 1, 1, sheets.partSheet.getLastColumn()).getValues()[0]
       .map(function (v) { return String(v).trim().toLowerCase(); });
-    let mailCol = -1;
-    ['почта', 'e-mail', 'email'].forEach(function (h) {
-      if (mailCol === -1 && header.indexOf(h) !== -1) mailCol = header.indexOf(h);
-    });
-    if (mailCol === -1) {
-      mailCol = header.length;
-      sheets.partSheet.getRange(1, mailCol + 1).setValue('Почта');
-    }
+    const mailCol = findOrAddCol_(sheets.partSheet, header, ['почта', 'e-mail', 'email'], 'Почта');
+    const subCol = findOrAddCol_(sheets.partSheet, header, ['подписка'], 'Подписка');
     const row = [];
     row[header.indexOf('фио')] = fio;
     row[header.indexOf('отдел')] = dept;
     row[mailCol] = safeCell_(email);
+    row[subCol] = sub;
     for (let i = 0; i < row.length; i++) if (row[i] === undefined) row[i] = '';
     sheets.partSheet.appendRow(row);
     return json_({ ok: true, participants: getParticipants_(sheets.partSheet) });
   } catch (err) {
     return json_({ ok: false, error: String(err && err.message || err) });
   }
+}
+
+/**
+ * Номер колонки (с 0) по одному из заголовков; если нет — дописывает заголовок
+ * в первую свободную колонку и добавляет его в header.
+ */
+function findOrAddCol_(sheet, header, names, title) {
+  for (let i = 0; i < names.length; i++) {
+    if (header.indexOf(names[i]) !== -1) return header.indexOf(names[i]);
+  }
+  const col = header.length;
+  sheet.getRange(1, col + 1).setValue(title);
+  header.push(title.toLowerCase());
+  return col;
 }
 
 /**
