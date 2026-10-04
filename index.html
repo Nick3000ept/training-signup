@@ -456,6 +456,7 @@
         <input id="phone" type="tel" placeholder="+7 900 123-45-67" maxlength="20" autocomplete="tel">
       </div>
       <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="mail"> <span>Только вебинары<span class="check-sub">Прошу отправлять мне ссылки на вебинары на почту</span></span></label>
+      <label class="check" style="margin-top:12px;"><input type="radio" name="contact" value="none"> <span>Обучение не нужно</span></label>
       <button class="btn" id="saveBtn">Записаться</button>
       <div class="msg" id="saveMsg"></div>
     </div>
@@ -1169,7 +1170,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
   const contactEl = document.querySelector('input[name="contact"]:checked');
   const contact = contactEl ? contactEl.value : '';
   const phone = document.getElementById('phone').value.trim();
-  if (!contact) { msg.className = 'msg err'; msg.textContent = 'Выберите формат обучения: полный или только вебинары.'; return; }
+  if (!contact) { msg.className = 'msg err'; msg.textContent = 'Выберите формат обучения.'; return; }
   if (contact === 'tg' && !/^\+?[\d\s\-()]{10,20}$/.test(phone)) { msg.className = 'msg err'; msg.textContent = 'Укажите телефон, к которому привязан Telegram.'; return; }
 
   btn.disabled = true;
