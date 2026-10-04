@@ -279,6 +279,7 @@
     cursor: pointer;
     list-style: none;
   }
+  .prog-date { color: var(--muted); font-weight: 400; white-space: nowrap; }
   details.prog summary::-webkit-details-marker { display: none; }
   details.prog summary::after {
     content: '+';
@@ -432,13 +433,13 @@
   <section id="tab-program" class="tab">
     <div class="card">
       <p class="mat-title">Корпоративная программа обучения AI</p>
-      <p class="mat-note" style="margin-bottom:0;">Программа собрана под задачи, которые прислали подразделения, и под результаты опроса сотрудников: 59 задач от восьми подразделений. Всего 13 занятий: три части программы и отдельная сессия вопросов и ответов.</p>
+      <p class="mat-note" style="margin-bottom:0;">Программа собрана под задачи, которые прислали подразделения, и под результаты опроса сотрудников: 59 задач от восьми подразделений. Всего 13 занятий: три части программы и отдельная сессия вопросов и ответов. Занятия идут по пятницам со 2 октября по 25 декабря 2026 года — дата указана рядом с каждым занятием.</p>
     </div>
     <div class="card">
       <p class="mat-title">Общая база — 3 занятия</p>
       <p class="mat-note">Для всей группы, один поток, 35–40 человек. Нажмите на занятие, чтобы увидеть его состав.</p>
       <details class="prog">
-        <summary>1. Знакомство с AI: как это работает и как этим пользоваться</summary>
+        <summary><span>1. Знакомство с AI: как это работает и как этим пользоваться <span class="prog-date">· 2 октября</span></span></summary>
         <div class="sub-list">
           <div class="sub-head">Общие темы</div>
           <div class="sub-item">Как работают большие языковые модели — простым языком, без лишней техники</div>
@@ -461,7 +462,7 @@
         </div>
       </details>
       <details class="prog">
-        <summary>2. Claude Cowork: работа с файлами и данными</summary>
+        <summary><span>2. Claude Cowork: работа с файлами и данными <span class="prog-date">· 9 октября</span></span></summary>
         <div class="sub-list">
           <div class="sub-head">Общие темы</div>
           <div class="sub-item">Чем Claude Cowork отличается от обычного чата и как он работает с вашими файлами</div>
@@ -488,7 +489,7 @@
         </div>
       </details>
       <details class="prog">
-        <summary>3. Claude Code: агенты кодинга для не-программистов</summary>
+        <summary><span>3. Claude Code: агенты кодинга для не-программистов <span class="prog-date">· 16 октября</span></span></summary>
         <div class="sub-list">
           <div class="sub-head">Общие темы</div>
           <div class="sub-item">Зачем нужен Claude Code и чем он отличается от Claude Cowork</div>
@@ -514,7 +515,7 @@
       <p class="mat-title">Модули по направлениям — 5 занятий</p>
       <p class="mat-note">По одному занятию на направление, группа 25–30 человек. В каждом модуле 4–5 ключевых задач разбираются практически, остальные темы — обзорно, с разбором условий, при которых их можно решить.</p>
       <details class="prog">
-        <summary>А. Проектная документация и чертежи</summary>
+        <summary><span>А. Проектная документация и чертежи <span class="prog-date">· 23 октября</span></span></summary>
         <div class="sub-list">
           <div class="sub-head">Для кого: отдел развития, проектировщики, тендерный отдел, контрольно-ревизионный блок</div>
           <div class="sub-head">Разбирается практически</div>
@@ -530,7 +531,7 @@
         </div>
       </details>
       <details class="prog">
-        <summary>Б. Тендеры, подрядчики и цены</summary>
+        <summary><span>Б. Тендеры, подрядчики и цены <span class="prog-date">· 30 октября</span></span></summary>
         <div class="sub-list">
           <div class="sub-head">Для кого: тендерный отдел, отдел развития, закупки</div>
           <div class="sub-head">Разбирается практически</div>
@@ -545,7 +546,7 @@
         </div>
       </details>
       <details class="prog">
-        <summary>В. Финансы, бюджет и отчётность</summary>
+        <summary><span>В. Финансы, бюджет и отчётность <span class="prog-date">· 6 ноября</span></span></summary>
         <div class="sub-list">
           <div class="sub-head">Для кого: финансовый отдел, контрольно-ревизионный блок, экономисты проектов</div>
           <div class="sub-head">Разбирается практически</div>
@@ -561,7 +562,7 @@
         </div>
       </details>
       <details class="prog">
-        <summary>Г. Контроль стройки, сроки и переписка</summary>
+        <summary><span>Г. Контроль стройки, сроки и переписка <span class="prog-date">· 13 ноября</span></span></summary>
         <div class="sub-list">
           <div class="sub-head">Для кого: планирование и отчётность, строительная площадка, руководители проектов</div>
           <div class="sub-head">Разбирается практически</div>
@@ -578,7 +579,7 @@
         </div>
       </details>
       <details class="prog">
-        <summary>Д. Документы и договорная работа</summary>
+        <summary><span>Д. Документы и договорная работа <span class="prog-date">· 20 ноября</span></span></summary>
         <div class="sub-list">
           <div class="sub-head">Для кого: юристы, договорной блок, сотрудники, работающие с контрагентами</div>
           <div class="sub-head">Разбирается практически</div>
@@ -591,18 +592,19 @@
       </details>
     </div>
     <div class="card">
-      <p class="mat-title">Сессия вопросов и ответов — 1 занятие</p>
+      <p class="mat-title">Сессия вопросов и ответов — 1 занятие <span class="prog-date">· 27 ноября</span></p>
       <p class="mat-note">Проводится после пяти модулей и до начала трека ядра, для участников общей базы и модулей, до 40 человек.</p>
       <div class="prog-item">Ответы на накопившиеся вопросы по всей пройденной программе</div>
       <div class="prog-item">Разбор сложных тем, которые нужно уточнить</div>
       <div class="prog-item">Задачи, которые не успели рассмотреть на основных занятиях</div>
       <div class="prog-item">Вопросы собираются заранее в общем чате, приоритеты разбора согласуются до занятия</div>
+      <div class="prog-item">Это не шестой модуль, а отдельное занятие внутри общих 13</div>
     </div>
     <div class="card">
       <p class="mat-title">Трек ядра развития AI — 4 занятия</p>
       <p class="mat-note">Отдельная группа 5–10 человек, отбор по домашним заданиям базовых занятий и по наличию работающего результата, а не по должности. Как строить внутренние инструменты и передавать их коллегам.</p>
       <details class="prog">
-        <summary>1. Claude Code как инструмент разработки</summary>
+        <summary><span>1. Claude Code как инструмент разработки <span class="prog-date">· 4 декабря</span></span></summary>
         <div class="sub-list">
           <div class="sub-item">Как ставить задачу агенту и работать с уже существующим кодом</div>
           <div class="sub-item">Файл правил и устройства проекта, который агент учитывает при каждой работе</div>
@@ -612,7 +614,7 @@
         </div>
       </details>
       <details class="prog">
-        <summary>2. От процесса к внутренней системе</summary>
+        <summary><span>2. От процесса к внутренней системе <span class="prog-date">· 11 декабря</span></span></summary>
         <div class="sub-list">
           <div class="sub-item">Цепочка «процесс → структура данных → интерфейс → роли и маршруты → уведомления → аналитика → проверка → запуск»</div>
           <div class="sub-item">Единая панель контроля автоматизаций: статус, ошибки, последний успешный запуск, недоставленные уведомления</div>
@@ -620,7 +622,7 @@
         </div>
       </details>
       <details class="prog">
-        <summary>3. Интеграции и подключения</summary>
+        <summary><span>3. Интеграции и подключения <span class="prog-date">· 18 декабря</span></span></summary>
         <div class="sub-list">
           <div class="sub-item">MCP и подключения Claude к почте, календарю, диску и таблицам</div>
           <div class="sub-item">Что доступно сразу, что требует настройки, а что — согласования службы безопасности</div>
@@ -630,7 +632,7 @@
         </div>
       </details>
       <details class="prog">
-        <summary>4. Тиражирование внутри компании</summary>
+        <summary><span>4. Тиражирование внутри компании <span class="prog-date">· 25 декабря</span></span></summary>
         <div class="sub-list">
           <div class="sub-item">Оформление решения в Project или skill для пользователя, который не знает его устройства</div>
           <div class="sub-item">Что входит в передаваемое решение и какая нужна минимальная документация</div>
@@ -640,15 +642,29 @@
           <div class="sub-item">Дорожная карта развития AI в компании</div>
         </div>
       </details>
+      <details class="prog">
+        <summary><span>Что должно получиться по итогам трека</span></summary>
+        <div class="sub-list">
+          <div class="sub-item">У каждого участника — работающий инструмент, который можно передать другому человеку</div>
+          <div class="sub-item">Единая панель контроля существующих автоматизаций</div>
+          <div class="sub-item">Реестр внутренних AI-решений компании</div>
+          <div class="sub-item">Техзадания на интеграции, которые можно передать в ИТ</div>
+          <div class="sub-item">Черновик внутренних правил использования AI</div>
+          <div class="sub-item">Дорожная карта развития AI на год</div>
+          <div class="sub-item">Всё это делают сами участники при поддержке преподавателя — результат зависит от выполнения практических заданий</div>
+        </div>
+      </details>
     </div>
     <div class="card">
       <p class="mat-title">Формат</p>
-      <div class="prog-item">Онлайн, занятие — 2 часа</div>
-      <div class="prog-item">По пятницам, одно занятие в неделю</div>
+      <div class="prog-item">Онлайн, по видеосвязи; занятие — 2 часа, по договорённости можно продлить на 15–20 минут</div>
+      <div class="prog-item">По пятницам, одно занятие в неделю, со 2 октября по 25 декабря 2026 года</div>
+      <div class="prog-item">Как устроено занятие: 15 минут — цель и связь с прошлыми темами, 35 минут — как работает инструмент, 50 минут — разбор задач компании на присланных материалах, 20 минут — вопросы, итоги и домашнее задание</div>
       <div class="prog-item">Общая база — один поток 35–40 человек; модули — 25–30 человек; трек ядра — 5–10 человек</div>
-      <div class="prog-item">Все занятия записываются, записи остаются у компании</div>
+      <div class="prog-item">Занятия записываются; запись передаётся компании в течение 5 рабочих дней</div>
       <div class="prog-item">После каждого занятия передаются разобранные сценарии: шаги, формулировки запросов и точки проверки</div>
-      <div class="prog-item">По каждой из трёх частей программы передаётся сводный конспект</div>
+      <div class="prog-item">По каждой из трёх частей программы передаётся сводный конспект — в течение 5 рабочих дней после окончания части</div>
+      <div class="prog-item">Домашнее задание делается на своей рабочей задаче; лучшие работы разбираются на следующем занятии</div>
     </div>
   </section>
 
