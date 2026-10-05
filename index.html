@@ -427,6 +427,13 @@
       <input id="fio" type="text" placeholder="Иванов Иван Иванович" maxlength="100" autocomplete="name">
       <label for="email">Почта</label>
       <input id="email" type="email" placeholder="ivanov@example.ru" maxlength="100" autocomplete="email">
+      <label for="org">Организация</label>
+      <select id="org">
+        <option value="">— выберите —</option>
+        <option>Альфа Строй</option>
+        <option>Аконс Девелопмент</option>
+        <option>УК Клевер Парк</option>
+      </select>
       <label for="dept">Отдел</label>
       <select id="dept"><option value="">Загрузка…</option></select>
       <label for="sub">Нужна ли подписка</label>
@@ -1154,6 +1161,7 @@ document.querySelectorAll('input[name="contact"]').forEach(function (r) {
 document.getElementById('saveBtn').addEventListener('click', async function () {
   const fio = document.getElementById('fio').value.trim();
   const email = document.getElementById('email').value.trim();
+  const org = document.getElementById('org').value;
   const dept = document.getElementById('dept').value;
   const sub = document.getElementById('sub').value;
   const aiLevel = document.getElementById('aiLevel').value;
@@ -1165,6 +1173,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
   if (fio.length < 3) { msg.className = 'msg err'; msg.textContent = 'Укажите ФИО.'; return; }
   if (!email) { msg.className = 'msg err'; msg.textContent = 'Укажите почту.'; return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = 'msg err'; msg.textContent = 'Проверьте почту — в ней ошибка.'; return; }
+  if (!org) { msg.className = 'msg err'; msg.textContent = 'Выберите организацию.'; return; }
   if (!dept) { msg.className = 'msg err'; msg.textContent = 'Выберите отдел.'; return; }
   if (!sub) { msg.className = 'msg err'; msg.textContent = 'Выберите, нужна ли подписка.'; return; }
   if (!aiLevel) { msg.className = 'msg err'; msg.textContent = 'Выберите свой опыт работы с ИИ.'; return; }
@@ -1180,7 +1189,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
     const data = await fetchJson(BASE, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ action: 'save', fio: fio, email: email, dept: dept, sub: sub, aiLevel: aiLevel, aiText: aiText, contact: contact, phone: contact === 'tg' ? phone : '' })
+      body: JSON.stringify({ action: 'save', fio: fio, email: email, org: org, dept: dept, sub: sub, aiLevel: aiLevel, aiText: aiText, contact: contact, phone: contact === 'tg' ? phone : '' })
     }, 2);
     if (data.ok) {
       participants = data.participants || participants;
@@ -1193,6 +1202,7 @@ document.getElementById('saveBtn').addEventListener('click', async function () {
       document.getElementById('fio').value = '';
       document.getElementById('email').value = '';
       document.getElementById('sub').value = '';
+      document.getElementById('org').value = '';
       document.getElementById('aiLevel').value = '';
       document.getElementById('aiText').value = '';
       document.querySelectorAll('input[name="contact"]').forEach(function (r) { r.checked = false; });

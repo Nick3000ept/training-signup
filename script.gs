@@ -4,12 +4,13 @@
  * Листы находятся по заголовкам (устойчиво к переименованию):
  *  - лист отделов: A1 = "Подразделение", отделы в колонке A ниже;
  *  - лист участников: первая строка содержит "ФИО" и "Отдел".
- * Запись — только добавление строк [ФИО, Отдел, Почта, Подписка, Уровень ИИ, Опыт ИИ, Заявка, Телефон] на лист участников
- * (колонки «Почта», «Подписка», «Уровень ИИ», «Опыт ИИ», «Заявка», «Телефон» ищутся по заголовку, при отсутствии заголовок дописывается
+ * Запись — только добавление строк [ФИО, Отдел, Почта, Подписка, Уровень ИИ, Опыт ИИ, Заявка, Телефон, Организация] на лист участников
+ * (колонки «Почта», «Подписка», «Уровень ИИ», «Опыт ИИ», «Заявка», «Телефон», «Организация» ищутся по заголовку, при отсутствии заголовок дописывается
  * в первую свободную колонку). Почта на сайт не отдаётся.
  */
 
 const SHEET_ID = '1LZOXlwmEaJHBQ8HE59LWpmlgkWGcvRVxvoyIti6BKrg';
+const ORGS = ['Альфа Строй', 'Аконс Девелопмент', 'УК Клевер Парк'];
 const SUB_OPTIONS = ['Не нужна', 'Есть своя подписка', 'Нужна подписка на Claude', 'Нужна подписка на ChatGPT', 'Нужны обе: Claude и ChatGPT'];
 const AI_LEVELS = [
   'Не пользовался',
@@ -115,6 +116,8 @@ function doPost(e) {
     if (email.length > 100 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return json_({ ok: false, error: 'Почта указана с ошибкой' });
     }
+    const org = String(data.org || '').trim();
+    if (ORGS.indexOf(org) === -1) return json_({ ok: false, error: 'Выберите организацию' });
     const sub = String(data.sub || '').trim();
     if (SUB_OPTIONS.indexOf(sub) === -1) return json_({ ok: false, error: 'Выберите, нужна ли подписка' });
     const aiLevel = String(data.aiLevel || '').trim();
@@ -151,6 +154,7 @@ function doPost(e) {
     const expCol = findOrAddCol_(sheets.partSheet, header, ['опыт ии'], 'Опыт ИИ');
     const reqCol = findOrAddCol_(sheets.partSheet, header, ['заявка'], 'Заявка');
     const phoneCol = findOrAddCol_(sheets.partSheet, header, ['телефон'], 'Телефон');
+    const orgCol = findOrAddCol_(sheets.partSheet, header, ['организация'], 'Организация');
     const row = [];
     row[header.indexOf('фио')] = fio;
     row[header.indexOf('отдел')] = dept;
@@ -160,6 +164,7 @@ function doPost(e) {
     row[expCol] = aiText;
     row[reqCol] = contact + ' (' + Utilities.formatDate(new Date(), 'Europe/Moscow', 'dd.MM.yyyy HH:mm') + ')';
     row[phoneCol] = phone;
+    row[orgCol] = org;
     for (let i = 0; i < row.length; i++) if (row[i] === undefined) row[i] = '';
     sheets.partSheet.appendRow(row);
     return json_({ ok: true, participants: getParticipants_(sheets.partSheet) });
