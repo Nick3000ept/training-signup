@@ -754,11 +754,6 @@
       </div>
       <a class="mat-link" href="https://antonanton.any.org/obuchenie-ii-alfa-stroy" target="_blank" rel="noopener">Открыть</a>
     </div>
-    <div class="card">
-      <p class="mat-title">Приложенные документы</p>
-      <p class="mat-note">Материалы, которые подразделения передали для подготовки программы (через кнопку «Приложить документ» на вкладке «Подготовка»).</p>
-    </div>
-    <div id="uploadsList" class="loading">Загрузка списка…</div>
   </section>
 
 </main>
@@ -882,6 +877,7 @@ function escapeHtml(s) {
 
 function renderUploads() {
   const box = document.getElementById('uploadsList');
+  if (!box) return; // список приложенных документов убран со страницы 2026-10-05
   box.classList.remove('loading');
   if (!uploads.length) {
     box.innerHTML = '<p class="placeholder">Пока ничего не приложено.</p>';
@@ -1093,7 +1089,7 @@ document.getElementById('upSend').addEventListener('click', async function () {
         } catch (e2) {}
       }
       msg.className = 'msg ok';
-      msg.textContent = 'Готово! Документ «' + file.name + '» передан — он появится в списке на вкладке «Материалы».';
+      msg.textContent = 'Готово! Документ «' + file.name + '» передан.';
       fileInput.value = '';
       document.getElementById('upSurname').value = '';
       document.getElementById('upDesc').value = '';

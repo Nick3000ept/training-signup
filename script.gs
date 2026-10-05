@@ -91,8 +91,8 @@ function doGet(e) {
       return json_({
         ok: true,
         departments: getDepartments_(sheets.deptSheet),
-        participants: getParticipants_(sheets.partSheet),
-        uploads: getUploads_()
+        participants: getParticipants_(sheets.partSheet)
+        // список загрузок на сайт больше не отдаётся (убран со страницы 2026-10-05)
       });
     }
     return json_({ ok: true, pong: true });
@@ -221,7 +221,7 @@ function handleUpload_(data) {
 
   const logSheet = getUploadSheet_();
   logSheet.appendRow([new Date(), surname, dept, fileName, file.getUrl(), desc, folder]);
-  return json_({ ok: true, uploads: getUploads_() });
+  return json_({ ok: true });
 }
 
 function getUploadFolder_() {
